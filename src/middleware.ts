@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from 'next/server';
 const AUTH_COOKIE_NAME = process.env.NEXT_AUTH_TOKEN_NAME ?? 'ghdashauth';
 const PROTECTED_PREFIX = '/dashboard';
 
-const API_BASE_ENDPOINT = process.env.NEXT_PUBLIC_API_BASE! + process.env.NEXT_GITHUB_AUTHENTICATION_ENDPOINT_URL!;
+const API_BASE_ENDPOINT = process.env.NEXT_PUBLIC_API_BASE! + process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL!;
 const AUTH_VERIFY_ENDPOINT = '/session';
 
 const PUBLIC_REDIRECTS = new Set<string>(['/', '/login']);
@@ -30,7 +30,8 @@ async function verifySession(request: NextRequest, cookieValue: string | undefin
         console.log('Verifying res status:', res.status, res.statusText);
         if (!res.ok) return { valid: false };
         return { valid: true };
-    } catch {
+    } catch (error) {
+        console.log('Error verifying session:', error);
         return { valid: false };
     }
 }
@@ -39,7 +40,7 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const cookieValue = request.cookies.get(AUTH_COOKIE_NAME)?.value;
-
+    
     const { valid } = await verifySession(request, cookieValue);
 
     if (isProtected(pathname)) {

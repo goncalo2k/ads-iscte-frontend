@@ -1,32 +1,36 @@
+"use client";
 import Image from "next/image";
 import githubLogo from "../assets/images/github-logo.png";
-import PageContainer from "@/components/page-container/page-container-component";
+import ContentContainer from "@/components/content-container/content-container-component";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const apiBase = process.env.NEXT_PUBLIC_API_BASE!;
-  const githubAuthEndpoint = process.env.NEXT_GITHUB_AUTHENTICATION_ENDPOINT_URL!;
+  const githubAuthEndpoint = process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL!;
   const loginEndpoint = "/login";
-  
+
+  const handleLogin = () => {
+    window.location.href = `${apiBase}${githubAuthEndpoint}${loginEndpoint}`;
+  };
+
   return (
-    <div>
-      <main >
-        <PageContainer>
-          <a
-            href={`${apiBase}${githubAuthEndpoint}${loginEndpoint}`}
-          >
+    <>
+      <ContentContainer maxWidth={true}>
+        <h1 className="text-4xl">Welcome to the GitDash</h1>
+        <div>
+          <Button variant="ghost" onClick={handleLogin}>
             <Image
               aria-hidden
               src={githubLogo}
               alt="GitHub icon"
               width={16}
               height={16}
+              className="w-4 h-4 object-contain"
             />
-            Log in to Github
-          </a>
-        </PageContainer>
-      </main>
-      <footer>
-      </footer>
-    </div>
+            <span>Log in to Github</span>
+          </Button>
+        </div>
+      </ContentContainer>
+    </>
   );
 }

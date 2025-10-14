@@ -1,4 +1,4 @@
-import './page-container-component.scss';
+import './page-container-component.css';
 import React from 'react';
 
 type PageContainerProps = {
