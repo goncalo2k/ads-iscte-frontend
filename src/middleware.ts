@@ -27,7 +27,6 @@ async function verifySession(request: NextRequest, cookieValue: string | undefin
             cache: 'no-store',
         });
         
-        console.log('Verifying res status:', res.status, res.statusText);
         if (!res.ok) return { valid: false };
         return { valid: true };
     } catch (error) {

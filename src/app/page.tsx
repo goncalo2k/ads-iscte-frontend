@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import githubLogo from "../assets/images/github-logo.png";
-import ContentContainer from "@/components/content-container/content-container-component";
+import ContentContainer from "@/components/content-container/content-container";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {

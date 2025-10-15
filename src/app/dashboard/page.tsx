@@ -1,20 +1,18 @@
-'use client';
-import ContentContainer from '@/components/content-container/content-container-component';
-import PageContainer from '@/components/page-container/page-container-component';
-import { Command } from 'cmdk';
 
-export default function DashboardPage() {
+import ContentContainer from '@/components/content-container/content-container';
+import DashboardSearchBar from '@/components/dashboard-search-bar/dashboard-search-bar';
+import HttpService from '../services/http/http.service';
+
+const API_DASHBOARD_ENDPOINT = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL!;
+
+export default async function DashboardPage() {
+    const httpService: HttpService = new HttpService();
+
+    const res = await httpService.get(API_DASHBOARD_ENDPOINT);
+
     return (
         <ContentContainer>
-            <h1 className="text-2xl font-bold">Dashboard</h1>
-            <Command>
-                <Command.Input placeholder="Search..." />
-                <Command.List>
-                    <Command.Item>Item 1</Command.Item>
-                    <Command.Item>Item 2</Command.Item>
-                    <Command.Item>Item 3</Command.Item>
-                </Command.List>
-            </Command>
+            <DashboardSearchBar />
         </ContentContainer>
     );
 }
