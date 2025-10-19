@@ -10,4 +10,6 @@ export interface Repository {
     forks_count: number;
     stargazers_count: number;
     watchers_count: number;
+    contributors_count?: number;
+    contributors?: any;
 }

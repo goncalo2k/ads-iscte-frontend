@@ -1,0 +1,19 @@
+.dashboard-search :is(.cmdk-item, [role="option"]) {
+  transition: background-color .12s ease;
+  outline: 0;
+  border-radius: 8px;
+}
+
+.dashboard-search :is(.cmdk-item, [role="option"]):is(:hover, :focus-visible) {
+  background: var(--card);
+}
+
+.dashboard-search :is(.cmdk-item, [role="option"])[aria-selected="true"],
+.dashboard-search :is(.cmdk-item, [role="option"])[data-selected="true"] {
+  background: transparent;
+}
+
+.dashboard-search :is(.cmdk-item, [role="option"])[aria-selected="true"]:is(:hover, :focus-visible),
+.dashboard-search :is(.cmdk-item, [role="option"])[data-selected="true"]:is(:hover, :focus-visible) {
+  background: var(--card);
+}
