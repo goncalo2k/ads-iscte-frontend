@@ -9,9 +9,10 @@ const API_DASHBOARD_ENDPOINT = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_U
 
 export default async function RepoDashboardPage({ params }: any) {
     const httpService = new HttpService();
-    const repoName = params.repoName;
-    
-    //const repoAdditionalInfo: Repository = await httpService.get<Repository>(`${API_DASHBOARD_ENDPOINT}/repository/${repoName}`);
+    const repoName = `${params.owner}/${params.repoName}`;
+    console.log('RepoDashboardPage params:', params);
+    const repoAdditionalInfo: Repository = await httpService.get<Repository>(`${API_DASHBOARD_ENDPOINT}/repository/${repoName}`);
+    console.log('RepoDashboardPage repoAdditionalInfo:', repoAdditionalInfo);
     return (
         <div className='flex flex-row gap-6 pb-10'>
             {/* <RepoSummaryContainer repo={repo} /> */}

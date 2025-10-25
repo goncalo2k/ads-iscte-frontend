@@ -24,7 +24,7 @@ export default function DashboardSearchBar(props: DashboardSearchBarProps) {
 
 
     const handleRepositoryClick = (repo: Repository) => {
-        router.push(`/dashboard/${repo.name}`);
+        router.push(`/dashboard/${repo.full_name.split('/')[0]}/${repo.name}`);
     };
 
     useEffect(() => {
