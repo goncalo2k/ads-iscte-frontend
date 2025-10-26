@@ -15,6 +15,11 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
             {props.selectedContributor && (
                 <div>
                     <h2>Graphs</h2>
+                    <span>Displaying stats for contributor: {props.selectedContributor.name}</span>
+                    <span>Commits made: {props.selectedContributor.contributions}</span>
+                    {props.selectedContributor.additions && props.selectedContributor.deletions &&
+                        (<><span>Additions made: {props.selectedContributor.additions}</span><span>Deletions made: {props.selectedContributor.deletions}</span></>)}
+                    {/* Graph components would go here */}
                 </div>
             )}
             {!(props.selectedContributor) && (

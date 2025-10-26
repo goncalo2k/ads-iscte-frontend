@@ -15,7 +15,7 @@ export default function RepoContributorsNavBar(props: RepoContributorsNavBarProp
 
             {props.contributors && props.contributors.length > 0 && (<ul>
                 {props.contributors.map(contributor => (
-                    <li key={contributor.id}>
+                    <li key={contributor.id} onClick={() => props.onSelectContributor(contributor)}>
                         {contributor.name} - {contributor.contributions} contributions
                     </li>
                 ))}
