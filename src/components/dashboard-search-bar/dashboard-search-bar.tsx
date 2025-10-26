@@ -88,6 +88,7 @@ export default function DashboardSearchBar(props: DashboardSearchBarProps) {
                             <CommandItem className='dashboard-search-item px-2'
                                 key={repo.id}
                                 value={[repo.name, repo.full_name, repo.html_url].filter(Boolean).join(' ')}
+                                onSelect={() => handleRepositoryClick(repo)}
                             >
                                 {repo.name}
                             </CommandItem>
