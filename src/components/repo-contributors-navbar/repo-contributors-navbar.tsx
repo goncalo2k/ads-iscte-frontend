@@ -13,7 +13,7 @@ export default function RepoContributorsNavBar(props: RepoContributorsNavBarProp
         <div>
             <h1>Repository Contributors</h1>
 
-            {props.contributors.length > 0 && (<ul>
+            {props.contributors && props.contributors.length > 0 && (<ul>
                 {props.contributors.map(contributor => (
                     <li key={contributor.id}>
                         {contributor.name} - {contributor.contributions} contributions
