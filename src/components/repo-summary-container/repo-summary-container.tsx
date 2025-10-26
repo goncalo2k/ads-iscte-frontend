@@ -6,13 +6,14 @@ import { Contributor } from '@/types/contributor.model';
 type RepoSummaryContainerProps = {
     selectedRepo: Repository;
     selectedContributor: Contributor | undefined;
+    loadingStats: boolean;
 };
 
 export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
 
     return (
         <div>
-            {props.selectedContributor && (
+            {props.selectedContributor && !props.loadingStats && (
                 <div>
                     <h2>Graphs</h2>
                     <span>Displaying stats for contributor: {props.selectedContributor.name}</span>

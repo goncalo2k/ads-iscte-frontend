@@ -5,4 +5,8 @@ export interface Contributor {
     contributions: number;
     additions?: number;
     deletions?: number;
+    issuesOpened?: number;
+    issuesClosed?: number;
+    prsSubmitted?: number;
+    prsApproved?: number;
 }

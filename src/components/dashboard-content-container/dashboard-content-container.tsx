@@ -45,6 +45,7 @@ export default function RepoDashboardContentContainer(props: RepoDashboardConten
             const data = payload?.data;
             console.log('data', data);
             setSelectedContributor(data as Contributor);
+            
             if (!data) throw new Error('Malformed BFF response');
         } catch (err: any) {
             if (err?.name === 'AbortError') return;
@@ -60,7 +61,8 @@ export default function RepoDashboardContentContainer(props: RepoDashboardConten
 
 
     useEffect(() => {
-        if (!selectedContributor) {
+        
+        if (!selectedContributor || !selectedContributor.node_id) {
             setStatsError(false);
             setLoadingStats(false);
             if (abortRef.current) abortRef.current.abort();
@@ -76,7 +78,7 @@ export default function RepoDashboardContentContainer(props: RepoDashboardConten
         return () => {
             ac.abort();
         };
-    }, [selectedContributor]);
+    }, [selectedContributor?.node_id]);
 
 
 
@@ -89,7 +91,7 @@ export default function RepoDashboardContentContainer(props: RepoDashboardConten
             </div>
             <div className='flex flex-col gap-6 pb-10'>
                 <RepoDashboardHeader selectedRepo={props.repoAdditionalInfoResponse.data} />
-                <RepoSummaryContainer selectedRepo={props.repoAdditionalInfoResponse.data} selectedContributor={selectedContributor} />
+                <RepoSummaryContainer selectedRepo={props.repoAdditionalInfoResponse.data} loadingStats={loadingStats} selectedContributor={selectedContributor} />
             </div>
         </div>
     );
