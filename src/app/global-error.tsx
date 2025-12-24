@@ -26,7 +26,7 @@ export default function GlobalError({
         // global-error must include html and body tags
         <html lang="en" className="dark">
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <AppProvider>
+                <AppProvider initialUser={null} initialUserRepos={[]}>
                     <PageContainer>
                         <ContentContainer>
                             <button onClick={() => window.location.reload()}>Try again</button>

@@ -4,15 +4,25 @@ import './header.css';
 
 import React from 'react';
 import { useAppContext } from '@/app/provider';
-import { redirect } from 'next/navigation';
 import CodeContainer from '../code-container/code-container';
+import { DoorOpen } from 'lucide-react';
 
 export default function Header() {
-    const { user, selectedContributor, setSelectedContributor } = useAppContext();
-
+    const { user, selectedContributor, setSelectedContributor, clearContext } = useAppContext();
     const handleRedirectToHome = () => {
         if (selectedContributor) { setSelectedContributor(null); }
         window.location.href = '/dashboard';
+    }
+
+    const handleLogout = async () => {
+
+        const bffRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL}/logout`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        clearContext();
+        window.location.href = '/'
     }
 
     return (
@@ -28,6 +38,7 @@ export default function Header() {
                 <span className='user-label label'>
                     {user.name}
                 </span>
+                <DoorOpen className='icon' onClick={handleLogout} />
             </div>
             }
         </div>

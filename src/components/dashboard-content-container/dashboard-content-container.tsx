@@ -1,5 +1,5 @@
-
 'use client';
+
 import { useAppContext } from '@/app/provider';
 import RepoContributorsNavBar from '@/components/repo-contributors-navbar/repo-contributors-navbar';
 import RepoDashboardHeader from '@/components/repo-dashboard-header/repo-dashboard-header';

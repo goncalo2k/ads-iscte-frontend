@@ -32,10 +32,6 @@ export default async function RootLayout({
   let initialUser = null;
   let initialUserRepos: any[] = [];
   try {
-    // IMPORTANT: your HttpService must forward cookies when running on the server,
-    // otherwise the API will think you're logged out.
-
-
     const http = new HttpService();
     const res = await http.get<DashboardResponse>(API_DASHBOARD_ENDPOINT);
 

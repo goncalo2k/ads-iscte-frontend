@@ -16,6 +16,7 @@ type AppContextType = {
   setPublicRepos: React.Dispatch<React.SetStateAction<Repository[] | null>>;
   setSelectedRepo: React.Dispatch<React.SetStateAction<Repository | null>>;
   setSelectedContributor: React.Dispatch<React.SetStateAction<Contributor | null>>;
+  clearContext: React.Dispatch<React.SetStateAction<void>>;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -29,7 +30,14 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   const [publicRepos, setPublicRepos] = useState<Repository[] | null>(null);
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
   const [selectedContributor, setSelectedContributor] = useState<Contributor | null>(null);
-
+  const clearContext = () => {
+    setUser(null);
+    setUserRepos(null);
+    setPublicRepos(null);
+    setSelectedRepo(null);
+    setSelectedContributor(null);
+  };
+  
   const value = useMemo(
     () => ({
       user,
@@ -41,7 +49,9 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       setUserRepos,
       setPublicRepos,
       setSelectedRepo,
-      setSelectedContributor
+      setSelectedContributor,
+
+      clearContext
     }),
     [user, userRepos, publicRepos, selectedRepo, selectedContributor]
   );

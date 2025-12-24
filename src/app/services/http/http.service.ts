@@ -23,6 +23,7 @@ class HttpService {
         };
 
         const res = await fetch(url, {
+            credentials: "include",
             headers,
             ...options
         });

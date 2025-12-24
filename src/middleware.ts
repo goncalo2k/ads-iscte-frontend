@@ -21,6 +21,7 @@ async function verifySession(request: NextRequest, cookieValue: string | undefin
 
     try {
         const res = await fetch(API_BASE_ENDPOINT + AUTH_VERIFY_ENDPOINT, {
+            credentials: "include",
             headers: {
                 cookie: `${AUTH_COOKIE_NAME}=${cookieValue}`,
             },
