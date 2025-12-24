@@ -1,21 +1,19 @@
 'use client';
 
+import { useAppContext } from '@/app/provider';
 import { Contributor } from '@/types/contributor.model';
 
-type RepoContributorsNavBarProps = {
-    contributors: Contributor[];
-    onSelectContributor?: any;
-};
 
-export default function RepoContributorsNavBar(props: RepoContributorsNavBarProps) {
+export default function RepoContributorsNavBar() {
+    const { selectedRepo, selectedContributor, setSelectedContributor } = useAppContext();
 
     return (
         <div>
             <h1>Repository Contributors</h1>
 
-            {props.contributors && props.contributors.length > 0 && (<ul>
-                {props.contributors.map(contributor => (
-                    <li key={contributor.id} onClick={() => props.onSelectContributor(contributor)}>
+            {selectedRepo?.contributors && selectedRepo?.contributors.length > 0 && (<ul>
+                {selectedRepo?.contributors.map((contributor: Contributor) => (
+                    <li key={contributor.id} onClick={() => setSelectedContributor(contributor)}>
                         {contributor.name} - {contributor.contributions} contributions
                     </li>
                 ))}

@@ -17,3 +17,29 @@
 .dashboard-search :is(.cmdk-item, [role="option"])[data-selected="true"]:is(:hover, :focus-visible) {
   background: var(--card);
 }
+
+.dashboard-search-container {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--radius-xl);
+}
+.title-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title, .description {
+  align-self: center;
+}
+
+.description {
+  color: var(--muted-foreground);
+}
+
+.dashboard-search-item-container {
+  display: flex;
+  flex-direction: row;
+  padding: var(--radius-sm) var(--radius-md) var(--radius-sm) var(--radius-md);
+  gap: var(--radius-sm)
+}

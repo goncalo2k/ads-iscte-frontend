@@ -1,7 +1,10 @@
+import './globals.css';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import './globals.css';
 import PageContainer from "@/components/page-container/page-container";
+import { AppProvider } from "./provider";
+import { DashboardResponse } from "@/types/api.model";
+import HttpService from "./services/http/http.service";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,17 +21,39 @@ export const metadata: Metadata = {
   description: "Checkout your GitHub stats at a glance.",
 };
 
-export default function RootLayout({
+const API_DASHBOARD_ENDPOINT = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL!;
+
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let initialUser = null;
+  let initialUserRepos: any[] = [];
+  try {
+    // IMPORTANT: your HttpService must forward cookies when running on the server,
+    // otherwise the API will think you're logged out.
+
+
+    const http = new HttpService();
+    const res = await http.get<DashboardResponse>(API_DASHBOARD_ENDPOINT);
+
+    if (res?.status === 200 && res.data) {
+      initialUser = res.data.user;
+      initialUserRepos = res.data.repos;
+    }
+  } catch {
+    // ignore -> initialUser stays null
+  }
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <PageContainer>
-          {children}
-        </PageContainer>
+        <AppProvider initialUser={initialUser} initialUserRepos={initialUserRepos}>
+          <PageContainer>
+            {children}
+          </PageContainer>
+        </AppProvider>
       </body>
     </html>
   );

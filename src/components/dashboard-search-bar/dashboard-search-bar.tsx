@@ -7,30 +7,32 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Skeleton } from '../ui/skeleton';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAppContext } from '@/app/provider';
+import { Search } from 'lucide-react';
+import Divider from '../divider/divider';
+import CodeContainer from '../code-container/code-container';
 
-type DashboardSearchBarProps = {
-    userRepos: Repository[];
-};
 
-export default function DashboardSearchBar(props: DashboardSearchBarProps) {
-    const { userRepos } = props;
+
+export default function DashboardSearchBar() {
+    const { userRepos, setSelectedRepo, publicRepos, setPublicRepos } = useAppContext();
     const router = useRouter();
 
     const [term, setTerm] = useState('');
-    const [webResults, setWebResults] = useState<Repository[]>([]);
     const [loadingWeb, setLoadingWeb] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const abortRef = useRef<AbortController | null>(null);
 
 
     const handleRepositoryClick = (repo: Repository) => {
+        setSelectedRepo(repo);
         router.push(`/dashboard/${repo.full_name.split('/')[0]}/${repo.name}`);
     };
 
     useEffect(() => {
         if (term.trim().length < 2) {
             if (abortRef.current) abortRef.current.abort();
-            setWebResults([]);
+            setPublicRepos([]);
             setLoadingWeb(false);
             setError(null);
             return;
@@ -52,7 +54,7 @@ export default function DashboardSearchBar(props: DashboardSearchBarProps) {
 
                 if (!res.ok) throw new Error(`Search failed (${res.status})`);
                 const data: Repository[] = await res.json();
-                setWebResults(data ?? []);
+                setPublicRepos(data ?? []);
             } catch (e: any) {
                 if (e.name !== 'AbortError') setError(e.message ?? 'Search error');
             } finally {
@@ -66,36 +68,50 @@ export default function DashboardSearchBar(props: DashboardSearchBarProps) {
         };
     }, [term]);
 
+
     return (
-        <>
-            <h1 className="text-4xl">Dashboard</h1>
-            <Command className="dashboard-search rounded-lg border shadow-md md:min-w-[450px] px-4 py-2">
-                <CommandInput
-                    placeholder="Search..." className='w-full outline-none' onValueChange={setTerm} />
-                <CommandGroup heading="Your Repos" className='background-gray-50 max-h-60 overflow-y-scroll'>
-                    <CommandList>
-                        <CommandEmpty></CommandEmpty>
-                        {userRepos.map((repo) => (
-                            <CommandItem className='dashboard-search-item px-2' key={repo.id} onSelect={() => handleRepositoryClick(repo)}>{repo.name}</CommandItem>
-                        ))}
-                    </CommandList>
-                </CommandGroup>
-                <CommandSeparator />
-                {webResults && webResults.length > 0 && <CommandGroup heading="From the web..." className='background-gray-50 max-h-60 overflow-y-scroll'>
-                    <CommandList>
-                        {loadingWeb && <Skeleton className="h-4 w-full" />}
-                        {!loadingWeb && webResults.map((repo) => (
-                            <CommandItem className='dashboard-search-item px-2'
-                                key={repo.id}
-                                value={[repo.name, repo.full_name, repo.html_url].filter(Boolean).join(' ')}
-                                onSelect={() => handleRepositoryClick(repo)}
-                            >
-                                {repo.name}
-                            </CommandItem>
-                        ))}
-                    </CommandList>
-                </CommandGroup>}
+        <div className='dashboard-search-container'>
+            <div className='title-container'>
+                <span className="title text-2xl">Search Repositories</span>
+                <span className="description text-sm">Find and explore repositories from your account and across GitHub</span>
+            </div>
+            <Command className="dashboard-search rounded-lg border shadow-md md:min-w-[450px] px-4 py-2 flex-column gap-2">
+                <div className="flex gap-1 p-2">
+                    <div className='flex-row content-center'><Search className="h-4 w-4" /></div>
+                    <CommandInput
+                        placeholder="Search by name, owner, description or language..." className='w-full outline-none' onValueChange={setTerm} />
+                </div>
+                <Divider className="w-full" ></Divider>
+                <div className='p-2'>
+                    <CommandGroup heading="Your Repositories" className='background-gray-50 max-h-60 overflow-y-scroll'>
+                        <CommandList >
+                            <CommandEmpty></CommandEmpty>
+                            {userRepos && userRepos.map((repo) => (
+                                <CommandItem key={repo.id} onSelect={() => handleRepositoryClick(repo)}>
+                                    <div className='dashboard-search-item-container'>
+                                        <CodeContainer width={16} height={16} />
+                                        <span>{repo.name}</span>
+                                    </div>
+                                </CommandItem>
+                            ))}
+                        </CommandList>
+                    </CommandGroup>
+                    <CommandSeparator />
+                    {publicRepos && publicRepos.length > 0 && <CommandGroup heading="From the web..." className='background-gray-50 max-h-60 overflow-y-scroll'>
+                        <CommandList>
+                            {loadingWeb && <Skeleton className="h-4 w-full" />}
+                            {!loadingWeb && publicRepos.map((repo) => (
+                                <CommandItem key={repo.id} value={[repo.name, repo.full_name, repo.html_url].filter(Boolean).join(' ')} onSelect={() => handleRepositoryClick(repo)}>
+                                    <div className='dashboard-search-item-container'>
+                                        <CodeContainer width={16} height={16} />
+                                        <span>{repo.name}</span>
+                                    </div>
+                                </CommandItem>
+                            ))}
+                        </CommandList>
+                    </CommandGroup>}
+                </div>
             </Command>
-        </>
+        </div>
     );
 }

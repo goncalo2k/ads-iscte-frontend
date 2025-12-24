@@ -1,29 +1,26 @@
 'use client';
 
-import { Repository } from '@/types/repository.model';
-import { Contributor } from '@/types/contributor.model';
+import { useAppContext } from '@/app/provider';
 
 type RepoSummaryContainerProps = {
-    selectedRepo: Repository;
-    selectedContributor: Contributor | undefined;
     loadingStats: boolean;
 };
 
 export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
-
+    const {selectedRepo, selectedContributor} = useAppContext();
     return (
         <div>
-            {props.selectedContributor && !props.loadingStats && (
+            {selectedContributor && !props.loadingStats && (
                 <div>
                     <h2>Graphs</h2>
-                    <span>Displaying stats for contributor: {props.selectedContributor.name}</span>
-                    <span>Commits made: {props.selectedContributor.contributions}</span>
-                    {props.selectedContributor.additions && props.selectedContributor.deletions &&
-                        (<><span>Additions made: {props.selectedContributor.additions}</span><span>Deletions made: {props.selectedContributor.deletions}</span></>)}
+                    <span>Displaying stats for contributor: {selectedContributor.name}</span>
+                    <span>Commits made: {selectedContributor.contributions}</span>
+                    {selectedContributor.additions && selectedContributor.deletions &&
+                        (<><span>Additions made: {selectedContributor.additions}</span><span>Deletions made: {selectedContributor.deletions}</span></>)}
                     {/* Graph components would go here */}
                 </div>
             )}
-            {!(props.selectedContributor) && (
+            {!(selectedContributor) && (
                 <div>
                     <h2>Please pick a contributor</h2>
                 </div>

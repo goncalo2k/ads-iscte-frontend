@@ -3,6 +3,7 @@
 import ContentContainer from "@/components/content-container/content-container";
 import PageContainer from "@/components/page-container/page-container";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppProvider } from "./provider";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -25,13 +26,14 @@ export default function GlobalError({
         // global-error must include html and body tags
         <html lang="en" className="dark">
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <PageContainer>
-                    <ContentContainer>
-                        <button onClick={() => window.location.reload()}>Try again</button>
-                        <h2>Something went wrong!</h2>
-                    </ContentContainer>
-                </PageContainer>
-
+                <AppProvider>
+                    <PageContainer>
+                        <ContentContainer>
+                            <button onClick={() => window.location.reload()}>Try again</button>
+                            <h2>Something went wrong!</h2>
+                        </ContentContainer>
+                    </PageContainer>
+                </AppProvider>
             </body>
         </html>
     )
