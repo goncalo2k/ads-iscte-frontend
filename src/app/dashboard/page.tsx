@@ -24,7 +24,6 @@ export default async function DashboardPage() {
     };
 
     const response = await getUserInitialDashboard();
-    console.log(response);
 
     isLoading = false;
 

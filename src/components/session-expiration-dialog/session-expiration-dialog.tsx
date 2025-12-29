@@ -1,58 +1,75 @@
 "use client";
 
+import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSessionWatcher } from "@/hooks/useSessionWatcher";
 import { useAppContext } from "@/app/provider";
-import { useRouter } from "next/navigation";
+import "./session-expiration-dialog.css";
 
-export default async function SessionExpiredDialog() {
-  const { clearContext } = useAppContext()
-  const clearSession = async () => {
-    clearContext();
-    const bffRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL}/logout`, {
-      method: "POST",
-      credentials: "include"
-    });
-
-  }
+export default function SessionExpiredDialog() {
   const router = useRouter();
-  const { user } = useAppContext();
-  const { isExpired } = useSessionWatcher({ intervalMs: 30_000, enabled: !!user });
+  const { user, clearContext } = useAppContext();
+  const { isExpired } = useSessionWatcher({
+    intervalMs: 30_000,
+    enabled: !!user,
+  });
+
+  const [busy, setBusy] = useState(false);
+
+  const logoutUrl = useMemo(() => {
+    const base = process.env.NEXT_PUBLIC_API_BASE ?? "";
+    const path = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL ?? "";
+    return `${base}${path}/logout`;
+  }, []);
+
+  const clearSession = useCallback(async () => {
+    clearContext();
+    await fetch(logoutUrl, {
+      method: "POST",
+      credentials: "include",
+    }).catch(() => {});
+  }, [clearContext, logoutUrl]);
+
+  const onRefresh = useCallback(() => {
+    router.replace("/");
+  }, [router]);
+
+  const onLogoff = useCallback(async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await clearSession();
+    } finally {
+      router.replace("/");
+    }
+  }, [busy, clearSession, router]);
 
   if (!isExpired) return null;
 
-  const onRefresh = () => {
-    // If your refresh is “go to login” or “silent refresh”, do that here.
-    // safest: redirect to your auth start route
-    router.replace("/");
-  };
-
-  const onLogoff = () => {
-    clearSession()
-
-
-    router.replace("/");
-  };
-
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backdropFilter: "blur(4px)",
-        zIndex: 9999,
-      }}
-    >
-      <div style={{ padding: 20, borderRadius: 12, background: "var(--color-background-2)", border: "1px solid var(--color-background-3)", width: 420 }}>
-        <h3 style={{ marginBottom: 8 }}>Session expired</h3>
-        <p style={{ marginBottom: 16 }}>
-          Your session is no longer valid. You can refresh to sign in again, or log off.
+    <div className="session-expired-overlay" role="dialog" aria-modal="true">
+      <div
+        className="session-expired-backdrop"
+        onClick={onRefresh}
+      />
+
+      <div
+        className="session-expired-dialog"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="session-expired-title">Session expired</h3>
+
+        <p className="session-expired-text">
+          Your session is no longer valid. You can refresh to sign in again or log off.
         </p>
-        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-          <button onClick={onLogoff}>Log off</button>
-          <button onClick={onRefresh}>Refresh</button>
+
+        <div className="session-expired-actions">
+          <button onClick={onLogoff} disabled={busy}>
+            {busy ? "Logging off..." : "Log off"}
+          </button>
+          <button onClick={onRefresh} disabled={busy}>
+            Refresh
+          </button>
         </div>
       </div>
     </div>

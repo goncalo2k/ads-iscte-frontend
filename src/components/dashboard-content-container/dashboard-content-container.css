@@ -1,0 +1,24 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radius-xl);
+    height: 100%;
+}
+
+.dashboard-divider {
+    width: 100%;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding-bottom: var(--radius-xl);
+    gap: var(--radius-lg);
+}
+
+.link-container {
+    display: flex;
+    flex-direction: row;
+    color: var(--muted-foreground)
+}

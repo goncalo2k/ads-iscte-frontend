@@ -27,7 +27,3 @@
     color: var(--background-3);
     width: 100%;
 }
-
-.sub-title {
-    color: var(--muted-foreground)
-}

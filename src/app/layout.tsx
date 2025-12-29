@@ -5,6 +5,7 @@ import PageContainer from "@/components/page-container/page-container";
 import { AppProvider } from "./provider";
 import { DashboardResponse } from "@/types/api.model";
 import HttpService from "./services/http/http.service";
+import SessionExpiredDialog from '@/components/session-expiration-dialog/session-expiration-dialog';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,12 +41,12 @@ export default async function RootLayout({
       initialUserRepos = res.data.repos;
     }
   } catch {
-    // ignore -> initialUser stays null
   }
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AppProvider initialUser={initialUser} initialUserRepos={initialUserRepos}>
+          <SessionExpiredDialog/>
           <PageContainer>
             {children}
           </PageContainer>

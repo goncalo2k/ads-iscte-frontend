@@ -73,7 +73,7 @@ export default function DashboardSearchBar() {
         <div className='dashboard-search-container'>
             <div className='title-container'>
                 <span className="title text-2xl">Search Repositories</span>
-                <span className="description text-sm">Find and explore repositories from your account and across GitHub</span>
+                <span className="secondary-text text-sm">Find and explore repositories from your account and across GitHub</span>
             </div>
             <Command className="dashboard-search rounded-lg border shadow-md md:min-w-[450px] px-4 py-2 flex-column gap-2">
                 <div className="flex gap-1 p-2">

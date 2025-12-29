@@ -6,7 +6,6 @@ import React from 'react';
 import { Github } from 'lucide-react';
 
 import { Button } from '../ui/button';
-import Image from "next/image";
 
 export default function LoginComponent() {
     const apiBase = process.env.NEXT_PUBLIC_API_BASE!;
@@ -23,7 +22,7 @@ export default function LoginComponent() {
                 <Github width={64} height={64} />
             </div>
             <span className="text-xl">Welcome to the GitDash</span>
-            <span className="sub-title">Login to look into your stats!</span>
+            <span className="secondary-text">Login to look into your stats!</span>
             <div className='button-container'>
                 <Button className="button" onClick={handleLogin}>
                     <span>Log in to Github</span>

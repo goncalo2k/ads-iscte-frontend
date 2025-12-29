@@ -59,7 +59,7 @@
   --popover-foreground: rgb(16, 24, 40);
 
   --primary: rgb(20, 32, 56);
-  
+
   --primary-foreground: rgb(248, 250, 255);
 
   --secondary: rgb(235, 241, 255);
@@ -116,6 +116,7 @@
   --accent-foreground: rgb(235, 242, 255);
 
   --destructive: rgb(239, 68, 68);
+  --creative: rgb(6, 223, 114);
 
   --border: rgba(214, 224, 245, 0.12);
   /* was white alpha */
@@ -139,6 +140,14 @@
   border-radius: var(--radius-md);
   align-content: center;
   padding: var(--radius-sm);
+}
+
+.secondary-text {
+  color: var(--muted-foreground);
+}
+
+.selected {
+  background-color: var(--color-background-3)
 }
 
 @layer base {

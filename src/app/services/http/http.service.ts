@@ -32,7 +32,6 @@ class HttpService {
     }
 
     get<T = any>(path: string) {
-        console.log(path);
         return this.request<T>(path, { method: HttpMethod.GET });
     }
 

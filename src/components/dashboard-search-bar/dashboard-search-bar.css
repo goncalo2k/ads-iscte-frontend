@@ -24,17 +24,16 @@
 
   gap: var(--radius-xl);
 }
+
 .title-container {
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 
-.title, .description {
-  align-self: center;
-}
-
+.title,
 .description {
-  color: var(--muted-foreground);
+  align-self: center;
 }
 
 .dashboard-search-item-container {

@@ -5,6 +5,9 @@ export interface Repository {
     private: boolean;
     html_url: string;
     description: string | null;
+    updated_at: string,
+    size: number,
+    language: string,
     fork: boolean;
     url: string;
     forks_count: number;
@@ -12,4 +15,7 @@ export interface Repository {
     watchers_count: number;
     contributors_count?: number;
     contributors?: any;
+    open_issues?: number;
+    open_prs?: number;
+    commit_count?: number;
 }

@@ -1,3 +1,9 @@
+@media (max-width: 640px) {
+    .label {
+        display: none !important;
+    }
+}
+
 .header-container {
     padding-left: var(--radius-md);
     padding-right: var(--radius-md);
@@ -16,11 +22,12 @@
     padding: var(--radius-xs);
 }
 
-.left-container:hover{
-    cursor:pointer;
+.left-container:hover {
+    cursor: pointer;
 }
 
-.label, .icon {
+.label,
+.icon {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -31,13 +38,21 @@
     padding: var(--radius-xs);
 }
 
-.right-container {
+.right-container,
+.contributors-button-container {
     display: flex;
     flex-direction: row;
     gap: var(--radius-md);
-    padding: var(--radius-xs);
+    padding: var(--radius-sm);
+    align-items: center;
+}
+
+.contributors-button-container {
+    height: 100%;
 }
 
 .avatar {
+    width: 32px;
+    width: 32px;
     border-radius: var(--radius-sm);
 }

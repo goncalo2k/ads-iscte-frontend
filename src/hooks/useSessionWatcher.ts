@@ -1,11 +1,15 @@
+//TODO: Validate if this can be done by a settimeout + using expirationTime
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 
 type SessionState = "ok" | "expired";
 
+const API_BASE_ENDPOINT = process.env.NEXT_PUBLIC_API_BASE! + process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL!;
+
+
 export function useSessionWatcher(opts?: { intervalMs?: number; enabled?: boolean }) {
-  const intervalMs = opts?.intervalMs ?? 30_000;
+  const intervalMs = opts?.intervalMs ?? 20000;
   const enabled = opts?.enabled ?? true;
 
   const [state, setState] = useState<SessionState>("ok");
@@ -21,8 +25,9 @@ export function useSessionWatcher(opts?: { intervalMs?: number; enabled?: boolea
 
     const check = async () => {
       try {
-        const res = await fetch("/api/session/status", { cache: "no-store" });
-        const json = (await res.json()) as { valid?: boolean };
+        const res = await fetch(API_BASE_ENDPOINT + "/session", { cache: "no-store", credentials: "include" });
+        const json = (await res.json());
+        if (json.statusCode === 401) { window.location.href = '/' }
 
         if (stopped) return;
 

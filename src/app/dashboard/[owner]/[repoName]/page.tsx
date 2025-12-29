@@ -12,9 +12,8 @@ export default async function RepoDashboardPage({ params }: any) {
     const httpService = new HttpService();
     const repoUrl = `${owner}/${repoName}`;
     const repoAdditionalInfo = await httpService.get<RepositorySearchResponse>(`${API_DASHBOARD_ENDPOINT}/repository/${repoUrl}`);
-
     if (repoAdditionalInfo === undefined || !repoAdditionalInfo.data || repoAdditionalInfo.status !== 200) {
-        console.log('no repo!')
+        console.log('no repo!') //TODO: Display error
     }
 
     return (<>

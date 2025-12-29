@@ -1,0 +1,67 @@
+.contributor-stats-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.internal-container {
+    background-color: var(--color-background-3);
+    border: 1px solid var(--color-background-2);
+    border-radius: var(--radius-md);
+    align-content: center;
+    padding: var(--radius-sm);
+}
+
+.main-stats-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: var(--radius-xl);
+    padding: var(--radius-lg);
+}
+
+.user-main-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: var(--radius-xl);
+}
+
+.avatar-container {
+    width: 128px;
+    height: 128px;
+    border-radius: var(--radius-sm);
+}
+
+.username-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.inner-stats-container {
+    display: flex;
+    flex-direction: row;
+    /* gap: var(--radius-xl); */
+    justify-content: space-between;
+}
+
+.stats-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.loading {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.additions-label {
+    color: var(--creative);
+}
+
+.deletions-label {
+    color: var(--destructive)
+}

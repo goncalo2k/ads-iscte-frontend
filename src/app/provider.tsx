@@ -5,16 +5,20 @@ import { User } from "@/types/user.model";
 import React, { createContext, useContext, useMemo, useState } from "react";
 
 type AppContextType = {
+  sidebarStatus: boolean;
   user: User | null;
   userRepos: Repository[] | null;
   publicRepos: Repository[] | null;
   selectedRepo: Repository | null;
+  selectedContributorId: string | null;
   selectedContributor: Contributor | null;
 
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  setSidebarStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setUserRepos: React.Dispatch<React.SetStateAction<Repository[] | null>>;
   setPublicRepos: React.Dispatch<React.SetStateAction<Repository[] | null>>;
   setSelectedRepo: React.Dispatch<React.SetStateAction<Repository | null>>;
+  setSelectedContributorId: React.Dispatch<React.SetStateAction<string | null>>;
   setSelectedContributor: React.Dispatch<React.SetStateAction<Contributor | null>>;
   clearContext: React.Dispatch<React.SetStateAction<void>>;
 };
@@ -25,35 +29,43 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   children: React.ReactNode, initialUser: User | null;
   initialUserRepos: Repository[];
 }) {
+  const [sidebarStatus, setSidebarStatus] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(initialUser);
   const [userRepos, setUserRepos] = useState<Repository[] | null>(initialUserRepos);
   const [publicRepos, setPublicRepos] = useState<Repository[] | null>(null);
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(null);
+  const [selectedContributorId, setSelectedContributorId] = useState<string | null>(null);
   const [selectedContributor, setSelectedContributor] = useState<Contributor | null>(null);
   const clearContext = () => {
+    setSidebarStatus(false);
     setUser(null);
     setUserRepos(null);
     setPublicRepos(null);
     setSelectedRepo(null);
+    setSelectedContributorId(null);
     setSelectedContributor(null);
   };
   
   const value = useMemo(
     () => ({
+      sidebarStatus,
       user,
       userRepos,
       publicRepos,
       selectedRepo,
+      selectedContributorId,
       selectedContributor,
+      setSidebarStatus,
       setUser,
       setUserRepos,
       setPublicRepos,
       setSelectedRepo,
+      setSelectedContributorId,
       setSelectedContributor,
 
       clearContext
     }),
-    [user, userRepos, publicRepos, selectedRepo, selectedContributor]
+    [sidebarStatus, user, userRepos, publicRepos, selectedRepo, selectedContributorId, selectedContributor]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
