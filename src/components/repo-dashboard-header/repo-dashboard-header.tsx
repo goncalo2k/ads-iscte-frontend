@@ -23,7 +23,7 @@ export default function RepoDashboardHeader() {
             let minutes =
                 Math.floor(seconds / 60000)
             if (minutes === 0 && seconds >= 0) {
-                lastUpdatedAt = `Updated ${seconds} second${seconds > 1 ? 's' : ''} ago`;
+                lastUpdatedAt = `Updated ${seconds/1000} second${seconds/1000 > 1 ? 's' : ''} ago`;
             }
             else if (minutes < 60) {
                 lastUpdatedAt = `Updated ${minutes} minute${minutes > 1 ? 's' : ''} ago`;
