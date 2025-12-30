@@ -9,13 +9,14 @@ import { usePathname } from 'next/navigation';
 import Header from '../header/header';
 import { useAppContext } from '@/app/provider';
 import RepoContributorsNavBar from '../repo-contributors-navbar/repo-contributors-navbar';
+import FullpageLoader from '../fullpage-loader/fullpage-loader';
 
 type PageContainerProps = {
     children?: React.ReactNode;
 };
 
 export default function PageContainer({ children }: PageContainerProps) {
-    const { sidebarStatus } = useAppContext();
+    const { sidebarStatus, globalLoading } = useAppContext();
 
     const pathname = usePathname();
 
@@ -28,8 +29,9 @@ export default function PageContainer({ children }: PageContainerProps) {
     return (
         <div className="page-container">
             {!isHome && <Header />}
-            {sidebarStatus && isRepoDashboard && <RepoContributorsNavBar isSidebar={true}/>}
-            {children}
+            {!globalLoading && sidebarStatus && isRepoDashboard && <RepoContributorsNavBar isSidebar={true} />}
+            {!globalLoading && children}
+            {globalLoading && <FullpageLoader />}
         </div>
     );
 }

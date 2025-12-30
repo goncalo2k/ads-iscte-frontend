@@ -96,8 +96,16 @@
     gap: var(--radius-md);
 }
 
-.input {
-    max-width: fit-content;
+.navbar-input {
+    max-width: -webkit-fill-available;
+    max-width: -moz-available;
     margin: var(--radius-sm);
     text-overflow: ellipsis;
+}
+
+.loading-ref {
+    padding: 12;
+    text-align: center;
+    justify-items: center;
+    width: 100%;
 }

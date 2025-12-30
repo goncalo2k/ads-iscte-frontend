@@ -1,6 +1,6 @@
 @media (max-width: 640px) {
     .inner-stats-container {
-        flex-direction: column!important;
+        flex-direction: column !important;
     }
 }
 
@@ -70,4 +70,10 @@
 
 .deletions-label {
     color: var(--destructive)
+}
+
+.stats-skeleton {
+    width: 100%;
+    height: var(--radius-lg);
+    margin-top: var(--radius-xs);
 }

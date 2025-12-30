@@ -16,14 +16,16 @@ export default function RepoDashboardHeader() {
 
     let lastUpdatedAt = 'Updated a long time ago...';
 
-    if (!selectedRepo) console.log('no repo!')//window.location.href = '/dashboard';
-    console.log('selectedRepo', selectedRepo);
     if (selectedRepo && selectedRepo!.contributors) {
         let currentDate: Date = new Date();
         if (!!selectedRepo!.updated_at) {
+            let seconds = currentDate.getTime() - new Date(selectedRepo!.updated_at).getTime();
             let minutes =
-                Math.floor((currentDate.getTime() - new Date(selectedRepo!.updated_at).getTime()) / 60000)
-            if (minutes < 60) {
+                Math.floor(seconds / 60000)
+            if (minutes === 0 && seconds >= 0) {
+                lastUpdatedAt = `Updated ${seconds} second${seconds > 1 ? 's' : ''} ago`;
+            }
+            else if (minutes < 60) {
                 lastUpdatedAt = `Updated ${minutes} minute${minutes > 1 ? 's' : ''} ago`;
             } else {
                 let hours = Math.floor(minutes / 60);
@@ -68,7 +70,7 @@ export default function RepoDashboardHeader() {
                     </div>
                     <div className='bottom-container-item'>
                         <span className='secondary-text'>Pull requests</span>
-                        <span>{selectedRepo?.open_prs|| 0}</span>
+                        <span>{selectedRepo?.open_prs || 0}</span>
                     </div>
                     <div className='bottom-container-item'>
                         <span className='secondary-text'>Code size</span>

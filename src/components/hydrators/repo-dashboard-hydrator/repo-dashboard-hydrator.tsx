@@ -9,11 +9,12 @@ export default function RepoDashboardHydrator({
 }: {
     selectedRepo: Repository;
 }) {
-    const { setSelectedRepo } = useAppContext();
+    const { setSelectedRepo, setSelectedRepoContributors } = useAppContext();
 
     useEffect(() => {
         setSelectedRepo(selectedRepo);
-    }, [selectedRepo, setSelectedRepo]);
+        setSelectedRepoContributors(selectedRepo.contributors);
+    }, [selectedRepo, setSelectedRepo, setSelectedRepoContributors]);
 
     return null;
 }

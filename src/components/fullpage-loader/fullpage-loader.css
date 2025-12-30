@@ -1,0 +1,14 @@
+.fullpage-loader-container {
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.fullpage-spinner {
+    width: var(--radius-xxl);
+    height: var(--radius-xxl);
+}

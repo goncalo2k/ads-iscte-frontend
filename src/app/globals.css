@@ -146,6 +146,10 @@
   color: var(--muted-foreground);
 }
 
+.error-text {
+  color: var(--color-destructive);
+}
+
 .selected {
   background-color: var(--color-background-3)
 }
