@@ -1,6 +1,7 @@
 //TODO: Validate if this can be done by a settimeout + using expirationTime
 "use client";
 
+import { useAppContext } from "@/app/provider";
 import { useEffect, useRef, useState } from "react";
 
 type SessionState = "ok" | "expired";
@@ -9,6 +10,7 @@ const API_BASE_ENDPOINT = process.env.NEXT_PUBLIC_API_BASE! + process.env.NEXT_P
 
 
 export function useSessionWatcher(opts?: { intervalMs?: number; enabled?: boolean }) {
+  const { setSessionDialogStatus } = useAppContext();
   const intervalMs = opts?.intervalMs ?? 20000;
   const enabled = opts?.enabled ?? true;
 
@@ -27,11 +29,12 @@ export function useSessionWatcher(opts?: { intervalMs?: number; enabled?: boolea
       try {
         const res = await fetch(API_BASE_ENDPOINT + "/session", { cache: "no-store", credentials: "include" });
         const json = (await res.json());
-        if (json.statusCode === 401) { window.location.href = '/' }
+        /* if (json.statusCode === 401) { window.location.href = '/' } */
 
         if (stopped) return;
 
-        if (json.valid === false) {
+        if (json.statusCode === 401) {
+          setSessionDialogStatus(true);
           setState("expired");
           // stop polling once expired (avoid spam)
           if (timer) window.clearInterval(timer);

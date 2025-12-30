@@ -51,10 +51,6 @@
     gap: var(--radius-md);
 }
 
-.navbar-item:first-child {
-    border-top: 0;
-}
-
 .item-top-container,
 .item-bottom-container {
     display: flex;
@@ -82,13 +78,26 @@
 }
 
 .side-bar-title-container {
-flex-direction: row!important;
+    flex-direction: row !important;
     width: 100%;
     justify-content: space-between;
     align-items: center;
 }
-.contributors-title-container {
+
+.contributors-title-main-container {
     display: flex;
     flex-direction: column;
     gap: var(--radius-md);
+}
+
+.contributors-title-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--radius-md);
+}
+
+.input {
+    max-width: fit-content;
+    margin: var(--radius-sm);
+    text-overflow: ellipsis;
 }

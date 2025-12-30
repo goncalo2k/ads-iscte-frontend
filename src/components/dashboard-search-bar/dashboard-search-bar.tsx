@@ -30,14 +30,14 @@ export default function DashboardSearchBar() {
     };
 
     useEffect(() => {
-        if (term.trim().length < 2) {
+        //TODO: Decide if we want to call api only after 2 chars or not
+        if (term.trim().length < 1) {
             if (abortRef.current) abortRef.current.abort();
             setPublicRepos([]);
             setLoadingWeb(false);
             setError(null);
             return;
         }
-
 
         setLoadingWeb(true);
         setError(null);
@@ -68,7 +68,6 @@ export default function DashboardSearchBar() {
         };
     }, [term]);
 
-
     return (
         <div className='dashboard-search-container'>
             <div className='title-container'>
@@ -97,10 +96,14 @@ export default function DashboardSearchBar() {
                         </CommandList>
                     </CommandGroup>
                     <CommandSeparator />
-                    {publicRepos && publicRepos.length > 0 && <CommandGroup heading="From the web..." className='background-gray-50 max-h-60 overflow-y-scroll'>
+                    {(loadingWeb || (publicRepos && publicRepos.length > 0)) && <CommandGroup heading="From the web" className='background-gray-50 max-h-60 overflow-y-scroll gap-1'>
                         <CommandList>
-                            {loadingWeb && <Skeleton className="h-4 w-full" />}
-                            {!loadingWeb && publicRepos.map((repo) => (
+                            <CommandEmpty></CommandEmpty>
+                            {Array.from({ length: 5 }).map((_, i) =>
+                                loadingWeb ? <CommandItem key={'loading-' + i} value={term} disabled><Skeleton className="h-4 w-full pl-1 pr-1 dashboard-search-item-container" /></CommandItem> : null
+                            )}
+
+                            {!loadingWeb && publicRepos && publicRepos.length > 0 && publicRepos.map((repo) => (
                                 <CommandItem key={repo.id} value={[repo.name, repo.full_name, repo.html_url].filter(Boolean).join(' ')} onSelect={() => handleRepositoryClick(repo)}>
                                     <div className='dashboard-search-item-container'>
                                         <CodeContainer width={16} height={16} />
@@ -108,10 +111,11 @@ export default function DashboardSearchBar() {
                                     </div>
                                 </CommandItem>
                             ))}
+
                         </CommandList>
                     </CommandGroup>}
                 </div>
-            </Command>
-        </div>
+            </Command >
+        </div >
     );
 }

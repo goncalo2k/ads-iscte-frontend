@@ -42,3 +42,9 @@
   padding: var(--radius-sm) var(--radius-md) var(--radius-sm) var(--radius-md);
   gap: var(--radius-sm)
 }
+
+[cmdk-list-sizer] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--radius-md);
+}

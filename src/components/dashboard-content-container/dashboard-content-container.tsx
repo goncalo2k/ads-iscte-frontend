@@ -61,7 +61,6 @@ export default function RepoDashboardContentContainer() {
     };
 
     useEffect(() => {
-
         if (!selectedContributorId) {
             setStatsError(false);
             setLoadingStats(false);

@@ -6,6 +6,7 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 
 type AppContextType = {
   sidebarStatus: boolean;
+  sessionDialogStatus: boolean;
   user: User | null;
   userRepos: Repository[] | null;
   publicRepos: Repository[] | null;
@@ -13,8 +14,9 @@ type AppContextType = {
   selectedContributorId: string | null;
   selectedContributor: Contributor | null;
 
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setSidebarStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setSessionDialogStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setUserRepos: React.Dispatch<React.SetStateAction<Repository[] | null>>;
   setPublicRepos: React.Dispatch<React.SetStateAction<Repository[] | null>>;
   setSelectedRepo: React.Dispatch<React.SetStateAction<Repository | null>>;
@@ -30,6 +32,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   initialUserRepos: Repository[];
 }) {
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(false);
+  const [sessionDialogStatus, setSessionDialogStatus] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(initialUser);
   const [userRepos, setUserRepos] = useState<Repository[] | null>(initialUserRepos);
   const [publicRepos, setPublicRepos] = useState<Repository[] | null>(null);
@@ -38,6 +41,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   const [selectedContributor, setSelectedContributor] = useState<Contributor | null>(null);
   const clearContext = () => {
     setSidebarStatus(false);
+    setSessionDialogStatus(false);
     setUser(null);
     setUserRepos(null);
     setPublicRepos(null);
@@ -49,6 +53,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   const value = useMemo(
     () => ({
       sidebarStatus,
+      sessionDialogStatus,
       user,
       userRepos,
       publicRepos,
@@ -56,6 +61,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       selectedContributorId,
       selectedContributor,
       setSidebarStatus,
+      setSessionDialogStatus,
       setUser,
       setUserRepos,
       setPublicRepos,
@@ -65,7 +71,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
 
       clearContext
     }),
-    [sidebarStatus, user, userRepos, publicRepos, selectedRepo, selectedContributorId, selectedContributor]
+    [sidebarStatus, sessionDialogStatus, user, userRepos, publicRepos, selectedRepo, selectedContributorId, selectedContributor]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

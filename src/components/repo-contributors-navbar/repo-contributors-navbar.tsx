@@ -5,12 +5,13 @@ import './repo-contributors-navbar.css';
 import { useAppContext } from '@/app/provider';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { Contributor } from '@/types/contributor.model';
-import { ChevronLeft, GitCommitHorizontal, GitPullRequest } from 'lucide-react';
+import { ChevronLeft, GitCommitHorizontal, GitPullRequest, Info } from 'lucide-react';
 import { Input } from '../ui/input';
 import { useEffect, useState } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 export default function RepoContributorsNavBar({ isSidebar = false }: { isSidebar?: boolean }) {
-    const { selectedRepo, selectedContributor, sidebarStatus, setSelectedContributorId, setSidebarStatus } = useAppContext();
+    const { selectedRepo, selectedContributor, selectedContributorId, sidebarStatus, setSelectedContributorId, setSidebarStatus } = useAppContext();
     const { width } = useWindowSize();
     const [query, setQuery] = useState("");
 
@@ -22,10 +23,9 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
 
     const isLaptop = width >= 1024;
     /* TODO FIX
-        if (isLaptop) {
-            setSidebarStatus(false);
-        }
-     */
+    if (isLaptop) {
+        setSidebarStatus(false);
+    } */
     const selectContributor = (contributor: Contributor) => {
         setSelectedContributorId(contributor.node_id);
         if (sidebarStatus) {
@@ -37,8 +37,18 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
             <div className='overlay' onClick={() => { setSidebarStatus(false) }}></div>
             <div className={(isSidebar ? ('contributor-sidebar-container' + (sidebarStatus ? ' is-open' : '')) : 'contributor-navbar-container') + ' highlighted-container'}>
                 <div className='side-bar-title-container navbar-item'>
-                    <div className='contributors-title-container'>
-                        <span className='text-xl'>Contributors</span>
+                    <div className='contributors-title-main-container'>
+                        <div className='contributors-title-container'>
+                            <span className='text-xl'>Contributors</span>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Info width={16} height={16}/>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <span>This value might be different to the one you see on Github, since we only take Github accounts into consideration.</span>
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
                         <span className='secondary-text'>{selectedRepo?.contributors_count} members</span>
                     </div>
                     <div>
@@ -46,14 +56,15 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
                     </div>
                 </div>
                 <Input
-                    placeholder="Search contributors..."
+                    className='input'
+                    placeholder="Search contributors"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
                 <ul className='navbar-list-container'>
                     {filteredContributors.map((contributor: Contributor) => (
                         <li key={contributor.id} onClick={() => { selectContributor(contributor) }}>
-                            <div className={'navbar-item' + (selectedContributor && contributor.id === selectedContributor!.id ? ' selected' : '')}>
+                            <div className={'navbar-item' + (selectedContributorId && contributor.node_id === selectedContributorId ? ' selected' : '')}>
                                 <div className='item-top-container'>
                                     <img className="avatar" width={32} height={32} src={contributor.avatarUrl} alt="avatar" />
                                     <div className='item-top-text-container'>

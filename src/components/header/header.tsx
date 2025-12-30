@@ -4,7 +4,7 @@ import './header.css';
 
 import React from 'react';
 import { useAppContext } from '@/app/provider';
-import { DoorOpen, Users } from 'lucide-react';
+import { DoorOpen, Info, Users } from 'lucide-react';
 import CodeContainer from '../code-container/code-container';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { usePathname } from 'next/navigation';

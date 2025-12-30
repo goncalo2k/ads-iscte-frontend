@@ -32,11 +32,11 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                                 </div>
                                 <div className='stats-item'>
                                     <span className='secondary-text'>Pull Requests</span>
-                                    <span>{selectedContributor.prsSubmitted || 0}</span>
+                                    <span>{0}</span>
                                 </div>
                                 <div className='stats-item'>
                                     <span className='secondary-text'>Issues</span>
-                                    <span>{(selectedContributor.issuesOpened! + selectedContributor.issuesClosed!) || 0}</span>
+                                    <span>{0}</span>
                                 </div>
                                 <div className='stats-item'>
                                     <span className='secondary-text'>Additions</span>
@@ -51,9 +51,9 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                     </div>
                 </div>
             )}
-            {(!selectedContributor) && (
+            {(!selectedContributor || selectedContributor && props.loadingStats) && (
                 <div className='contributor-stats-container highlighted-container loading'>
-                    {props.loadingStats ? <Spinner />: <h2>Please pick a contributor</h2>}
+                    {props.loadingStats ? <Spinner /> : <h2>Please pick a contributor</h2>}
                 </div>
             )}
         </>
