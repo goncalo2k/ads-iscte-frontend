@@ -11,13 +11,17 @@ import { Contributor } from '@/types/contributor.model';
 import Divider from '../divider/divider';
 import { ChevronLeft } from 'lucide-react';
 import { useWindowSize } from '@/hooks/useWindowSize';
+import { UserActivityResponse } from '@/types/api.model';
+import { ActivityStats } from '@/types/activity-stats.model';
 
 export default function RepoDashboardContentContainer() {
-    const { selectedRepo, selectedContributorId, selectedContributor, globalLoading, setSelectedContributor, setSelectedContributorId } = useAppContext();
+    const { selectedRepo, selectedContributorId, selectedContributor, globalLoading, setSelectedContributor, setSelectedContributorId, setActivityData } = useAppContext();
     const { width } = useWindowSize();
     const [loadingFastStats, setLoadingFastStats] = useState(false);
+    const [loadingActivityGraph, setLoadingActivityGraph] = useState(false);
     const [loadingSlowStats, setLoadingSlowStats] = useState(false);
-    const [statsError, setStatsError] = useState(false);
+    const [statsError, setStatsError] = useState<string | null>(null);
+    const [activityGraphError, setActivityGraphError] = useState<string | null>(null);
     const abortRef = useRef<AbortController | null>(null);
 
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
@@ -50,8 +54,7 @@ export default function RepoDashboardContentContainer() {
         const payload = await res.json();
         const data = payload?.data;
         if (!data) throw new Error('Malformed BFF response');
-        setSelectedContributor({ ...selectedContributor, ...(data as Contributor) });
-        setLoadingFastStats(false);
+        return data as Contributor;
     };
 
     const fetchSlowStats = async (ac: any) => {
@@ -74,30 +77,69 @@ export default function RepoDashboardContentContainer() {
         const payload = await res.json();
         const data = payload?.data;
         if (!data) throw new Error('Malformed BFF response');
-        setSelectedContributor({ ...selectedContributor, ...(data as Contributor) });
-        setLoadingSlowStats(false);
+        return data as Contributor;
     };
 
     const fetchStats = async (ac: any) => {
         try {
-            setStatsError(false);
+            setStatsError(null);
 
             if (!selectedContributorId) window.location.href = '/dashboard';
 
-            await Promise.all([fetchFastStats(ac), fetchSlowStats(ac)]);
+            const [fastStats, slowStats] = await Promise.all([fetchFastStats(ac), fetchSlowStats(ac)]);
 
+            setSelectedContributor({ ...selectedContributor, ...fastStats, ...slowStats });
         } catch (err: any) {
             if (err?.name === 'AbortError') return;
             setStatsError(err?.message || 'Failed to fetch contributor stats');
         } finally {
             setLoadingSlowStats(false);
             setLoadingFastStats(false);
+            console.log('selectedContributor', selectedContributor)
         }
     };
 
+    const fetchActivityGraph = async (ac: any) => {
+        const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributorId}/activity`;
+
+        const res = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            signal: ac.signal,
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+
+        if (!res.ok) {
+            const text = await res.text().catch(() => '');
+            throw new Error(`BFF error ${res.status}: ${text || res.statusText}`);
+        }
+        const payload: UserActivityResponse = await res.json();
+        const data = payload?.data;
+        if (!data) throw new Error('Malformed BFF response');
+        return data as ActivityStats;
+    }
+
+    const fetchGraphs = async (ac: any) => {
+        try {
+            setActivityGraphError(null);
+            setLoadingActivityGraph(true);
+            const activityGraphData = await fetchActivityGraph(ac);
+
+            setActivityData(activityGraphData);
+        } catch (err: any) {
+            if (err?.name === 'AbortError') return;
+            setActivityGraphError(err?.message || 'Failed to fetch contributor activity stats');
+        } finally {
+            setLoadingActivityGraph(false);
+            setActivityGraphError(null);
+        }
+    }
+
     useEffect(() => {
         if (!selectedContributorId) {
-            setStatsError(false);
+            setStatsError(null);
             setLoadingFastStats(false);
             setLoadingSlowStats(false);
             if (abortRef.current) abortRef.current.abort();
@@ -109,6 +151,7 @@ export default function RepoDashboardContentContainer() {
         abortRef.current = ac;
 
         fetchStats(ac);
+        fetchGraphs(ac);
 
         return () => {
             ac.abort();

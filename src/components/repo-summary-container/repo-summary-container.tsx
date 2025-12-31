@@ -7,15 +7,19 @@ import { Contributor } from '@/types/contributor.model';
 import { Skeleton } from '../ui/skeleton';
 import { useEffect } from 'react';
 import { Check, Circle, CircleX, GitPullRequestArrow } from 'lucide-react';
+import ActivityChart from '../charts/activity-chart/activity-chart';
+import { buildMonthlyActivitySeries } from '@/lib/activity.utils';
 
 type RepoSummaryContainerProps = {
     loadingStats: { loadingFastStats: boolean, loadingSlowStats: boolean };
 };
 
 export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
-    const { selectedContributorId, selectedContributor, selectedRepo, selectedRepoContributors } = useAppContext();
+    const { selectedContributorId, selectedContributor, selectedRepo, selectedRepoContributors, activityData } = useAppContext();
     let initialContributor
     if (selectedRepoContributors && selectedRepoContributors && selectedRepoContributors.length > 0) initialContributor = selectedRepoContributors.find((c: Contributor) => c.node_id === selectedContributorId);
+
+    const activityPoints = buildMonthlyActivitySeries(activityData?.weeks || []);
     useEffect(() => { console.log('selectedContributor', selectedContributor, 'selectedContributorId', selectedContributorId) }, [selectedContributor, selectedContributorId])
     return (
         <>
@@ -38,10 +42,10 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                                     {!props.loadingStats.loadingFastStats && selectedContributor &&
                                         <div className='double-stat-container'>
                                             <div className='double-stat-item-container'>
-                                                <GitPullRequestArrow className='double-stat-icon'/><span>{selectedContributor.prsSubmitted}</span>
+                                                <GitPullRequestArrow className='double-stat-icon' /><span>{selectedContributor.prsSubmitted || 0}</span>
                                             </div>
                                             <div className='double-stat-item-container'>
-                                                <Check className='double-stat-icon'/><span>{selectedContributor.prsApproved}</span>
+                                                <Check className='double-stat-icon' /><span>{selectedContributor.prsApproved || 0}</span>
                                             </div>
                                         </div>}
                                     {props.loadingStats.loadingFastStats && <Skeleton className="stats-skeleton" />}
@@ -51,10 +55,10 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                                     {!props.loadingStats.loadingFastStats && selectedContributor &&
                                         <div className='double-stat-container'>
                                             <div className='double-stat-item-container'>
-                                                <Circle className='double-stat-icon'/><span className='additions-label'>{selectedContributor.issuesOpened}</span>
+                                                <Circle className='double-stat-icon' /><span className='additions-label'>{selectedContributor.issuesOpened || 0}</span>
                                             </div>
                                             <div className='double-stat-item-container'>
-                                                <CircleX className='double-stat-icon'/><span className='deletions-label'>{selectedContributor.issuesClosed}</span>
+                                                <CircleX className='double-stat-icon' /><span className='deletions-label'>{selectedContributor.issuesClosed || 0}</span>
                                             </div>
                                         </div>}
                                     {props.loadingStats.loadingFastStats && <Skeleton className="stats-skeleton" />}
@@ -71,6 +75,10 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div className='activity-stats-container internal-container'>
+                        <ActivityChart data={activityPoints}/>
                     </div>
                 </div>
             )}

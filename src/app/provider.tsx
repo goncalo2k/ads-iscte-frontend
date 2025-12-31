@@ -1,4 +1,5 @@
 "use client";
+import { ActivityStats } from "@/types/activity-stats.model";
 import { Contributor } from "@/types/contributor.model";
 import { Repository } from "@/types/repository.model";
 import { User } from "@/types/user.model";
@@ -16,6 +17,7 @@ type AppContextType = {
   selectedRepoContributors: Contributor[] | null;
   selectedContributorId: string | null;
   selectedContributor: Contributor | null;
+  activityData: ActivityStats | null;
 
   setSidebarStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setSessionDialogStatus: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,6 +30,8 @@ type AppContextType = {
   setSelectedRepoContributors: React.Dispatch<React.SetStateAction<Contributor[] | null>>;
   setSelectedContributorId: React.Dispatch<React.SetStateAction<string | null>>;
   setSelectedContributor: React.Dispatch<React.SetStateAction<Contributor | null>>;
+  setActivityData: React.Dispatch<React.SetStateAction<ActivityStats | null>>;
+
   clearContext: React.Dispatch<React.SetStateAction<void>>;
   clearSelectedRepoInfo: React.Dispatch<React.SetStateAction<void>>;
 };
@@ -49,6 +53,8 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   const [selectedRepoContributors, setSelectedRepoContributors] = useState<Contributor[] | null>(null);
   const [selectedContributorId, setSelectedContributorId] = useState<string | null>(null);
   const [selectedContributor, setSelectedContributor] = useState<Contributor | null>(null);
+  const [activityData, setActivityData] = useState<ActivityStats | null>(null);
+
   const clearContext = () => {
     setSidebarStatus(false);
     setSessionDialogStatus(false);
@@ -59,11 +65,13 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
     setSelectedRepoContributors(null);
     setSelectedContributorId(null);
     setSelectedContributor(null);
+    setActivityData(null);
   };
 
   const clearSelectedRepoInfo = () => {
     setSelectedRepo(null);
     setSelectedRepoContributors(null);
+    setActivityData(null)
   }
 
   const value = useMemo(
@@ -78,6 +86,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       selectedRepoContributors,
       selectedContributorId,
       selectedContributor,
+      activityData,
       setSidebarStatus,
       setSessionDialogStatus,
       setGlobalLoading,
@@ -88,11 +97,12 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       setSelectedRepoContributors,
       setSelectedContributorId,
       setSelectedContributor,
+      setActivityData,
 
       clearContext,
       clearSelectedRepoInfo
     }),
-    [sidebarStatus, sessionDialogStatus, globalLoading, user, userRepos, publicRepos, selectedRepo, selectedRepoContributors, selectedContributorId, selectedContributor]
+    [sidebarStatus, sessionDialogStatus, globalLoading, user, userRepos, publicRepos, selectedRepo, selectedRepoContributors, selectedContributorId, selectedContributor, activityData]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

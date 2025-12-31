@@ -1,4 +1,3 @@
-//TODO: Validate if this can be done by a settimeout + using expirationTime
 "use client";
 
 import { useAppContext } from "@/app/provider";

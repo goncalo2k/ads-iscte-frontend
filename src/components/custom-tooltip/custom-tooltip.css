@@ -1,0 +1,44 @@
+.activity-chart-tooltip {
+    background: rgba(10, 16, 32, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: white;
+    min-width: 160px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.activity-chart-tooltip-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.activity-chart-tooltip-list {
+    display: grid;
+    gap: var(--radius-sm);
+}
+
+.activity-chart-tooltip-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    opacity: 0.95;
+}
+
+.activity-chart-tooltip-left {
+    display: flex;
+    align-items: center;
+    gap: var(--radius-md);
+}
+
+.activity-chart-tooltip-left {
+    width: var(--radius-md);
+    height: var(--radius-md);
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.activity-chart-tooltip-value {
+  font-weight: 700;
+}

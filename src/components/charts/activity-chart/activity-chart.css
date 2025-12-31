@@ -1,0 +1,49 @@
+.activity-chart-card {
+  background: linear-gradient(180deg, rgba(10, 16, 32, 1), rgba(10, 16, 32, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.activity-chart-title {
+  color: white;
+  font-weight: 800;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.activity-chart-body {
+  width: 100%;
+}
+
+/* ----- Recharts theming (no inline tick/axisLine/tickLine) ----- */
+.activity-chart-body .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.10);
+}
+
+.activity-chart-body .recharts-xAxis .recharts-cartesian-axis-line,
+.activity-chart-body .recharts-yAxis .recharts-cartesian-axis-line {
+  stroke: rgba(255, 255, 255, 0.15);
+}
+
+.activity-chart-body .recharts-xAxis .recharts-cartesian-axis-tick-line,
+.activity-chart-body .recharts-yAxis .recharts-cartesian-axis-tick-line {
+  stroke: rgba(255, 255, 255, 0.15);
+}
+
+.activity-chart-body .recharts-cartesian-axis-tick-value {
+  fill: rgba(255, 255, 255, 0.70);
+}
+
+/* Legend */
+.activity-chart-body .recharts-legend-wrapper {
+  padding-top: 8px;
+}
+
+.activity-chart-body .recharts-legend-item-text {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.activityChartTooltipValue {
+  font-weight: 700;
+}

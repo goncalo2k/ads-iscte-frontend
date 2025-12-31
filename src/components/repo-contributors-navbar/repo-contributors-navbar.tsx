@@ -31,8 +31,10 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
 
     const isLaptop = width >= 1024;
     const selectContributor = (contributor: Contributor) => {
-        setSelectedContributorId(contributor.node_id);
-        setSelectedContributor(contributor);
+        if (contributor.node_id !== selectedContributorId) {
+            setSelectedContributorId(contributor.node_id);
+            setSelectedContributor(contributor);
+        }
         if (sidebarStatus) {
             setSidebarStatus(false);
         }
@@ -119,37 +121,33 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                {filteredContributors && filteredContributors.length > 0 && 
-                <ul className='navbar-list-container'>
-                    {filteredContributors.map((contributor: Contributor) => (
-                        <li key={contributor.id} onClick={() => { selectContributor(contributor) }}>
-                            <div className={'navbar-item' + (selectedContributorId && contributor.node_id === selectedContributorId ? ' selected' : '')}>
-                                <div className='item-top-container'>
-                                    <img className="avatar" width={32} height={32} src={contributor.avatarUrl} alt="avatar" />
-                                    <div className='item-top-text-container'>
-                                        <span>{contributor.name}</span>
-                                        <span className='secondary-text'>@{contributor.userName}</span>
+                {filteredContributors && filteredContributors.length > 0 &&
+                    <ul className='navbar-list-container'>
+                        {filteredContributors.map((contributor: Contributor) => (
+                            <li key={contributor.id} onClick={() => { selectContributor(contributor) }}>
+                                <div className={'navbar-item' + (selectedContributorId && contributor.node_id === selectedContributorId ? ' selected' : '')}>
+                                    <div className='item-top-container'>
+                                        <img className="avatar" width={32} height={32} src={contributor.avatarUrl} alt="avatar" />
+                                        <div className='item-top-text-container'>
+                                            <span>{contributor.name}</span>
+                                            <span className='secondary-text'>@{contributor.userName}</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='item-bottom-container'>
+                                    {/* <div className='item-bottom-container'>
                                     <div className='item-bottom-container-status'>
                                         <GitCommitHorizontal width={16} height={16} />
                                         <span>{contributor.contributions || 0}</span>
                                     </div>
-                                    <div className='item-bottom-container-status'>
-                                        <GitPullRequest width={16} height={16} />
-                                        <span>{0}</span> {/* TODO */}
-                                    </div>
+                                </div> */}
                                 </div>
+                            </li>
+                        ))}
+                        <li>
+                            <div ref={loadMoreRef} className="secondary-text loading-ref">
+                                {loadingMore ? <Spinner /> : loadingError ? <span className='secondary-text error-text'>Error loading more contributors</span> : (hasMore && query !== "" ? <span className='secondary-text'>Scroll to load more</span> : <span className='secondary-text'>All contributors loaded</span>)}
                             </div>
                         </li>
-                    ))}
-                    <li>
-                        <div ref={loadMoreRef} className="secondary-text loading-ref">
-                            {loadingMore ? <Spinner /> : loadingError ? <span className='secondary-text error-text'>Error loading more contributors</span> : (hasMore && query !== "" ? <span className='secondary-text'>Scroll to load more</span> : <span className='secondary-text'>All contributors loaded</span>)}
-                        </div>
-                    </li>
-                </ul>}
+                    </ul>}
             </div>
         </>)}
     </>
