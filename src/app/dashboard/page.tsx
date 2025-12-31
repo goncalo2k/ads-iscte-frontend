@@ -10,13 +10,9 @@ const API_DASHBOARD_ENDPOINT = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_U
 
 export default async function DashboardPage() {
     const httpService: HttpService = new HttpService();
-    let isLoading = false;
     let isError = false;
-
     const getUserInitialDashboard = async (): Promise<DashboardResponse> => {
-        isLoading = true;
         const response = await httpService.get(API_DASHBOARD_ENDPOINT);
-        isLoading = false;
         if (!response || !response.data || response.status !== 200) {
             isError = true;
         }
@@ -28,8 +24,8 @@ export default async function DashboardPage() {
 
     return (
         <ContentContainer>
-            <GlobalLoadingHydrator isLoading={isLoading} />
-            {!isError && !isLoading && <DashboardHydrator user={response.data!.user} repos={response.data!.repos} />}
+            <GlobalLoadingHydrator isLoading={false} />
+            {!isError && <DashboardHydrator user={response.data!.user} repos={response.data!.repos} />}
             <DashboardSearchBar />
         </ContentContainer>
     );

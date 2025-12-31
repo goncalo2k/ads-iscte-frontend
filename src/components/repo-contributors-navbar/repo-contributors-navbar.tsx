@@ -32,7 +32,7 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
     const isLaptop = width >= 1024;
     const selectContributor = (contributor: Contributor) => {
         setSelectedContributorId(contributor.node_id);
-        setSelectedContributor(null);
+        setSelectedContributor(contributor);
         if (sidebarStatus) {
             setSidebarStatus(false);
         }
@@ -42,6 +42,7 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
         if (!selectedRepo?.full_name) return;
         if (!hasMore) return;
         if (loadingRef.current) return;
+        if (query !== '') return;
 
         loadingRef.current = true;
         setLoadingMore(true);
@@ -90,7 +91,7 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
     }, [hasMore, loadingRef.current, selectedRepo?.full_name]);
 
     return (<>
-        {(isLaptop || sidebarStatus) && filteredContributors && filteredContributors.length > 0 && (<>
+        {(isLaptop || sidebarStatus) && selectedRepoContributors && selectedRepoContributors.length > 0 && (<>
             <div className='overlay' onClick={() => { setSidebarStatus(false) }}></div>
             <div className={(isSidebar ? ('contributor-sidebar-container' + (sidebarStatus ? ' is-open' : '')) : 'contributor-navbar-container') + ' highlighted-container'}>
                 <div className='side-bar-title-container navbar-item'>
@@ -118,6 +119,7 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
+                {filteredContributors && filteredContributors.length > 0 && 
                 <ul className='navbar-list-container'>
                     {filteredContributors.map((contributor: Contributor) => (
                         <li key={contributor.id} onClick={() => { selectContributor(contributor) }}>
@@ -144,10 +146,10 @@ export default function RepoContributorsNavBar({ isSidebar = false }: { isSideba
                     ))}
                     <li>
                         <div ref={loadMoreRef} className="secondary-text loading-ref">
-                            {loadingMore ? <Spinner /> : loadingError ? <span className='secondary-text error-text'>Error loading more contributors</span> : (hasMore ? <span className='secondary-text'>Scroll to load more</span> : <span className='secondary-text'>All contributors loaded</span>)}
+                            {loadingMore ? <Spinner /> : loadingError ? <span className='secondary-text error-text'>Error loading more contributors</span> : (hasMore && query !== "" ? <span className='secondary-text'>Scroll to load more</span> : <span className='secondary-text'>All contributors loaded</span>)}
                         </div>
                     </li>
-                </ul>
+                </ul>}
             </div>
         </>)}
     </>

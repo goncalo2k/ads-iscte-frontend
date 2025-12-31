@@ -9,14 +9,14 @@ import RepoDashboardHeader from '@/components/repo-dashboard-header/repo-dashboa
 import RepoSummaryContainer from '@/components/repo-summary-container/repo-summary-container';
 import { Contributor } from '@/types/contributor.model';
 import Divider from '../divider/divider';
-import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
 export default function RepoDashboardContentContainer() {
-    const { selectedRepo, selectedContributorId, setSelectedContributor } = useAppContext();
+    const { selectedRepo, selectedContributorId, selectedContributor, globalLoading, setSelectedContributor, setSelectedContributorId } = useAppContext();
     const { width } = useWindowSize();
-    const [loadingStats, setLoadingStats] = useState(false);
+    const [loadingFastStats, setLoadingFastStats] = useState(false);
+    const [loadingSlowStats, setLoadingSlowStats] = useState(false);
     const [statsError, setStatsError] = useState(false);
     const abortRef = useRef<AbortController | null>(null);
 
@@ -25,45 +25,81 @@ export default function RepoDashboardContentContainer() {
 
     const isLaptop = width >= 1024;
 
+    const handleRedirectToHome = () => {
+        if (selectedContributor) { setSelectedContributor(null); setSelectedContributorId(null); }
+        window.location.href = '/dashboard';
+    }
+
+    const fetchFastStats = async (ac: any) => {
+        setLoadingFastStats(true);
+        const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributorId}/stats`;
+
+        const res = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            signal: ac.signal,
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+
+        if (!res.ok) {
+            const text = await res.text().catch(() => '');
+            throw new Error(`BFF error ${res.status}: ${text || res.statusText}`);
+        }
+        const payload = await res.json();
+        const data = payload?.data;
+        if (!data) throw new Error('Malformed BFF response');
+        setSelectedContributor({ ...selectedContributor, ...(data as Contributor) });
+        setLoadingFastStats(false);
+    };
+
+    const fetchSlowStats = async (ac: any) => {
+        setLoadingSlowStats(true);
+        const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributorId}/slow-stats`;
+
+        const res = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            signal: ac.signal,
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+
+        if (!res.ok) {
+            const text = await res.text().catch(() => '');
+            throw new Error(`BFF error ${res.status}: ${text || res.statusText}`);
+        }
+        const payload = await res.json();
+        const data = payload?.data;
+        if (!data) throw new Error('Malformed BFF response');
+        setSelectedContributor({ ...selectedContributor, ...(data as Contributor) });
+        setLoadingSlowStats(false);
+    };
+
     const fetchStats = async (ac: any) => {
         try {
-            setLoadingStats(true);
             setStatsError(false);
 
             if (!selectedContributorId) window.location.href = '/dashboard';
 
-            const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributorId}`;
+            await Promise.all([fetchFastStats(ac), fetchSlowStats(ac)]);
 
-            const res = await fetch(url, {
-                method: 'GET',
-                credentials: 'include',
-                signal: ac.signal,
-                headers: {
-                    'Accept': 'application/json',
-                },
-            });
-
-            if (!res.ok) {
-                const text = await res.text().catch(() => '');
-                throw new Error(`BFF error ${res.status}: ${text || res.statusText}`);
-            }
-            const payload = await res.json();
-            const data = payload?.data;
-            setSelectedContributor(data as Contributor);
-
-            if (!data) throw new Error('Malformed BFF response');
         } catch (err: any) {
             if (err?.name === 'AbortError') return;
             setStatsError(err?.message || 'Failed to fetch contributor stats');
         } finally {
-            setLoadingStats(false);
+            setLoadingSlowStats(false);
+            setLoadingFastStats(false);
         }
     };
 
     useEffect(() => {
         if (!selectedContributorId) {
             setStatsError(false);
-            setLoadingStats(false);
+            setLoadingFastStats(false);
+            setLoadingSlowStats(false);
             if (abortRef.current) abortRef.current.abort();
             return;
         }
@@ -79,16 +115,14 @@ export default function RepoDashboardContentContainer() {
         };
     }, [selectedContributorId]);
 
-
-
     return (
         <div className='dashboard-container'>
-            <Link className="link-container" href={`/dashboard`}> <ChevronLeft /><span>Go to Dashboard</span></Link>
+            <div className="link-container" onClick={handleRedirectToHome}> <ChevronLeft /><span>Go to Dashboard</span></div>
             <RepoDashboardHeader />
             <Divider className='dashboard-divider' />
             <div className='stats-container'>
                 {isLaptop && <RepoContributorsNavBar />}
-                <RepoSummaryContainer loadingStats={loadingStats} />
+                <RepoSummaryContainer loadingStats={{ loadingFastStats, loadingSlowStats }} />
             </div>
         </div>
     );

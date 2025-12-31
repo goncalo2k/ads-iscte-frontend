@@ -8,7 +8,6 @@ import { RepositorySearchResponse } from '@/types/api.model';
 const API_DASHBOARD_ENDPOINT = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL!;
 
 export default async function RepoDashboardPage({ params }: any) {
-    let isLoading = true;
     const { owner, repoName } = await params;
     const httpService = new HttpService();
     const repoUrl = `${owner}/${repoName}`;
@@ -18,10 +17,9 @@ export default async function RepoDashboardPage({ params }: any) {
         console.log('no repo!') //TODO: Display error
 
     }
-    isLoading = false;
+    
     return (<>
         <RepoDashboardHydrator selectedRepo={repoAdditionalInfo.data!} />
-        <GlobalLoadingHydrator isLoading={isLoading} />
         <RepoDashboardContentContainer />
     </>
     );

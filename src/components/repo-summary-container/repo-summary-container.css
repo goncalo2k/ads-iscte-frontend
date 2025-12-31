@@ -75,5 +75,23 @@
 .stats-skeleton {
     width: 100%;
     height: var(--radius-lg);
-    margin-top: var(--radius-xs);
+    margin-top: var(--radius-sm);
+}
+
+.double-stat-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--radius-md);
+}
+
+.double-stat-item-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--radius-xs);
+    align-items: center;
+}
+
+.double-stat-icon {
+    width: 16px;
+    height: 16px;
 }

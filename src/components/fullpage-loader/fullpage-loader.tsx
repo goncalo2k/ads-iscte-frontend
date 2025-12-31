@@ -6,9 +6,8 @@ import './fullpage-loader.css';
 
 
 export default function FullpageLoader(props: { className?: string }) {
-    const { globalLoading } = useAppContext();
     return (
-        globalLoading && <div className={'fullpage-loader-container ' + props.className}>
+        <div className={'fullpage-loader-container ' + (props.className ?? '')}>
             <Spinner className='fullpage-spinner' />
         </div>
     );

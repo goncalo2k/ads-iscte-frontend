@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 import { useSessionWatcher } from '@/hooks/useSessionWatcher';
 
 export default function Header() {
-    const { user, selectedContributor, sidebarStatus, setSelectedContributor, setSelectedContributorId, clearContext, setSidebarStatus } = useAppContext();
+    const { user, selectedContributor, sidebarStatus, setGlobalLoading, setSelectedContributor, setSelectedContributorId, clearContext, setSidebarStatus } = useAppContext();
     const { width } = useWindowSize();
     const { isExpired } = useSessionWatcher();
 
@@ -28,13 +28,14 @@ export default function Header() {
 
 
     const handleLogout = async () => {
-
+        setGlobalLoading(true);
         await fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL}/logout`, {
             method: "GET",
             credentials: "include"
         });
 
         clearContext();
+        setGlobalLoading(false);
         window.location.href = '/'
     }
 

@@ -10,6 +10,7 @@ import Header from '../header/header';
 import { useAppContext } from '@/app/provider';
 import RepoContributorsNavBar from '../repo-contributors-navbar/repo-contributors-navbar';
 import FullpageLoader from '../fullpage-loader/fullpage-loader';
+import { useSessionWatcher } from '@/hooks/useSessionWatcher';
 
 type PageContainerProps = {
     children?: React.ReactNode;
@@ -17,6 +18,8 @@ type PageContainerProps = {
 
 export default function PageContainer({ children }: PageContainerProps) {
     const { sidebarStatus, globalLoading } = useAppContext();
+    const { isExpired } = useSessionWatcher();
+
 
     const pathname = usePathname();
 
@@ -29,7 +32,7 @@ export default function PageContainer({ children }: PageContainerProps) {
     return (
         <div className="page-container">
             {!isHome && <Header />}
-            {!globalLoading && sidebarStatus && isRepoDashboard && <RepoContributorsNavBar isSidebar={true} />}
+            {!isExpired && !globalLoading && sidebarStatus && isRepoDashboard && <RepoContributorsNavBar isSidebar={true} />}
             {!globalLoading && children}
             {globalLoading && <FullpageLoader />}
         </div>

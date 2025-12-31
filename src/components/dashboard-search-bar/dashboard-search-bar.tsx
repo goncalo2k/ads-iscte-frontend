@@ -15,7 +15,7 @@ import CodeContainer from '../code-container/code-container';
 
 
 export default function DashboardSearchBar() {
-    const { userRepos, setSelectedRepo, publicRepos, setPublicRepos } = useAppContext();
+    const { userRepos, setSelectedRepo, publicRepos, setPublicRepos, setGlobalLoading } = useAppContext();
     const router = useRouter();
 
     const [term, setTerm] = useState('');

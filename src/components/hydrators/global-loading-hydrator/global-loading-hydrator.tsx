@@ -12,7 +12,7 @@ export default function GlobalLoadingHydrator({
 
     useEffect(() => {
         setGlobalLoading(isLoading);
-    }, [isLoading]);
+    }, [isLoading, setGlobalLoading]);
 
     return null;
 }
