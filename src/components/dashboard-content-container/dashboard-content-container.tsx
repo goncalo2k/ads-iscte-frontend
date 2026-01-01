@@ -11,23 +11,26 @@ import { Contributor } from '@/types/contributor.model';
 import Divider from '../divider/divider';
 import { ChevronLeft } from 'lucide-react';
 import { useWindowSize } from '@/hooks/useWindowSize';
-import { UserActivityResponse } from '@/types/api.model';
+import { UserActivityResponse, UserPrConversionResponse } from '@/types/api.model';
 import { ActivityStats } from '@/types/activity-stats.model';
+import { PrConversionStats } from '@/types/pr-conversion-stats.model';
 
 export default function RepoDashboardContentContainer() {
-    const { selectedRepo, selectedContributorId, selectedContributor, globalLoading, setSelectedContributor, setSelectedContributorId, setActivityData } = useAppContext();
+    const { selectedRepo, selectedContributorId, selectedContributor, prConversionData, setSelectedContributor, setSelectedContributorId, setActivityData, setPrConversionData } = useAppContext();
     const { width } = useWindowSize();
     const [loadingFastStats, setLoadingFastStats] = useState(false);
-    const [loadingActivityGraph, setLoadingActivityGraph] = useState(false);
+    const [loadingGraphs, setLoadingGraphs] = useState(false);
     const [loadingSlowStats, setLoadingSlowStats] = useState(false);
     const [statsError, setStatsError] = useState<string | null>(null);
-    const [activityGraphError, setActivityGraphError] = useState<string | null>(null);
+    const [graphsError, setGraphsError] = useState<string | null>(null);
     const abortRef = useRef<AbortController | null>(null);
 
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
     const DASHBOARD_BASE = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL!;
 
     const isLaptop = width >= 1024;
+
+    const isContributorSelected = !!selectedContributorId;
 
     const handleRedirectToHome = () => {
         if (selectedContributor) { setSelectedContributor(null); setSelectedContributorId(null); }
@@ -121,19 +124,43 @@ export default function RepoDashboardContentContainer() {
         return data as ActivityStats;
     }
 
+    const fetchPrConversionGraph = async (ac: any) => {
+        const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributor?.userName}/pr-conversion`;
+
+        const res = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+            signal: ac.signal,
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+
+        if (!res.ok) {
+            const text = await res.text().catch(() => '');
+            throw new Error(`BFF error ${res.status}: ${text || res.statusText}`);
+        }
+        const payload: UserPrConversionResponse = await res.json();
+        const data = payload?.data;
+        if (!data) throw new Error('Malformed BFF response');
+        return data as PrConversionStats;
+    }
+
     const fetchGraphs = async (ac: any) => {
         try {
-            setActivityGraphError(null);
-            setLoadingActivityGraph(true);
-            const activityGraphData = await fetchActivityGraph(ac);
+            setGraphsError(null);
+            setLoadingGraphs(true);
+
+            const [activityGraphData, prConversionGraphData] = await Promise.all([fetchActivityGraph(ac), fetchPrConversionGraph(ac)]);
+
 
             setActivityData(activityGraphData);
+            setPrConversionData(prConversionGraphData);
         } catch (err: any) {
             if (err?.name === 'AbortError') return;
-            setActivityGraphError(err?.message || 'Failed to fetch contributor activity stats');
+            setGraphsError(err?.message || 'Failed to fetch contributor activity stats');
         } finally {
-            setLoadingActivityGraph(false);
-            setActivityGraphError(null);
+            setLoadingGraphs(false);
         }
     }
 
@@ -159,13 +186,16 @@ export default function RepoDashboardContentContainer() {
     }, [selectedContributorId]);
 
     return (
-        <div className='dashboard-container'>
+        <div className={'dashboard-container' + (isContributorSelected ? ' clear' : '')}>
             <div className="link-container" onClick={handleRedirectToHome}> <ChevronLeft /><span>Go to Dashboard</span></div>
             <RepoDashboardHeader />
             <Divider className='dashboard-divider' />
             <div className='stats-container'>
                 {isLaptop && <RepoContributorsNavBar />}
-                <RepoSummaryContainer loadingStats={{ loadingFastStats, loadingSlowStats }} />
+                <RepoSummaryContainer loadingStats={{ loadingFastStats, loadingSlowStats, loadingGraphs }} errors={{
+                    statsError,
+                    graphsError
+                }} />
             </div>
         </div>
     );

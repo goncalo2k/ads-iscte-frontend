@@ -44,7 +44,7 @@ export default function ActivityChart({
 
             <div className="activity-chart-body" style={{ height }}>
                 <ResponsiveContainer>
-                    <LineChart data={data} margin={{ top: 10, right: 10, left: 4, bottom: 8 }}>
+                    <LineChart data={data} margin={{ top: 0, right: 10, left: -20, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="4 6" />
                         <XAxis
                             dataKey="w"

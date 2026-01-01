@@ -1,6 +1,33 @@
 @media (max-width: 640px) {
-    .inner-stats-container {
+    .graphs-container {
+        flex-direction: column!important;
+    }
+
+    .main-stats-container {
         flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .avatar-container {
+        width: 96px !important;
+        height: 96px !important;
+    }
+
+    .username-container {
+        text-align: center !important;
+    }
+
+    .inner-stats-container {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: var(--radius-lg) !important;
+        width: 100% !important;
+    }
+
+    .stats-item {
+        align-items: center !important;
+        text-align: center !important;
     }
 }
 
@@ -14,8 +41,7 @@
 }
 
 .internal-container {
-    /* background-color: var(--color-background-3); */
-    background-color: linear-gradient(rgb(10, 16, 32), rgba(10, 16, 32, 0.92));
+    background: linear-gradient(180deg, rgba(10, 16, 32, 1), rgba(10, 16, 32, 0.92));
     border: 1px solid var(--color-background-2);
     border-radius: var(--radius-md);
     align-content: center;
@@ -40,7 +66,7 @@
 .avatar-container {
     width: 128px;
     height: 128px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
 }
 
 .username-container {
@@ -97,6 +123,24 @@
     height: 16px;
 }
 
-.activity-stats-container {
+.activity-stats-container,
+.conversion-rate-container {
     width: 100%;
+    background: linear-gradient(180deg, rgba(10, 16, 32, 1), rgba(10, 16, 32, 0.92));
+    border-radius: var(--radius-lg);
+    text-align: center;
+    align-content: center;
+}
+
+.activity-graph-loader {
+    height: 100%;
+    width: 100%;
+}
+
+.graphs-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--radius-lg);
+    width: 100%;
+    height: 100%;
 }

@@ -1,5 +1,7 @@
 import { ActivityPoint } from '@/types/activity-point.model';
 import { SearchWeeklyActivity } from '@/types/activity-stats.model';
+import { PieChartChell } from '@/types/pie-chart-cell.model';
+import { PrConversionStats } from '@/types/pr-conversion-stats.model';
 
 const monthKey = (dt: Date) => {
     const y = dt.getUTCFullYear();
@@ -24,7 +26,6 @@ export function buildMonthlyActivitySeries(weeks: SearchWeeklyActivity[]): Activ
 
     const sorted = [...weeks].sort((a, b) => a.w - b.w);
 
-    // Aggregate by month
     const byMonth = new Map<string, ActivityPoint>();
 
     for (const wk of sorted) {
@@ -35,14 +36,13 @@ export function buildMonthlyActivitySeries(weeks: SearchWeeklyActivity[]): Activ
             byMonth.get(key) ??
             ({
                 key,
-                w: monthStartUnixSeconds(dt),     // ✅ numeric X-axis key
-                label: monthLabel(dt),            // optional: you can keep it for display elsewhere
+                w: monthStartUnixSeconds(dt),
+                label: monthLabel(dt),
                 commits: 0,
                 additions: 0,
                 deletions: 0,
             } as ActivityPoint);
 
-        // Map your API fields to what the chart expects
         existing.commits += wk.c ?? 0;
         existing.additions += wk.a ?? 0;
         existing.deletions += wk.d ?? 0;
@@ -50,7 +50,6 @@ export function buildMonthlyActivitySeries(weeks: SearchWeeklyActivity[]): Activ
         byMonth.set(key, existing);
     }
 
-    // Fill missing months
     const first = new Date(sorted[0].w * 1000);
     const last = new Date(sorted[sorted.length - 1].w * 1000);
 

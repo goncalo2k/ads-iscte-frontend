@@ -35,7 +35,6 @@ export function useSessionWatcher(opts?: { intervalMs?: number; enabled?: boolea
         if (json.statusCode === 401) {
           setSessionDialogStatus(true);
           setState("expired");
-          // stop polling once expired (avoid spam)
           if (timer) window.clearInterval(timer);
           timer = null;
         } else {

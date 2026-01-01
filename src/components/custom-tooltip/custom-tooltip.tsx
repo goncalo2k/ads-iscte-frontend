@@ -10,7 +10,7 @@ export default function CustomTooltip({
 }: {
     active?: boolean;
     payload?: any[];
-    label?: number; // recharts passes the x-value here for numeric axes
+    label?: number;
 }) {
     const formatTooltipLabel = (unixSeconds: number) => {
         return new Date(unixSeconds * 1000).toLocaleDateString(undefined, {

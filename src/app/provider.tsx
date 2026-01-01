@@ -1,6 +1,7 @@
 "use client";
 import { ActivityStats } from "@/types/activity-stats.model";
 import { Contributor } from "@/types/contributor.model";
+import { PrConversionStats } from "@/types/pr-conversion-stats.model";
 import { Repository } from "@/types/repository.model";
 import { User } from "@/types/user.model";
 import React, { createContext, useContext, useMemo, useState } from "react";
@@ -18,6 +19,7 @@ type AppContextType = {
   selectedContributorId: string | null;
   selectedContributor: Contributor | null;
   activityData: ActivityStats | null;
+  prConversionData: PrConversionStats | null;
 
   setSidebarStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setSessionDialogStatus: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,6 +33,7 @@ type AppContextType = {
   setSelectedContributorId: React.Dispatch<React.SetStateAction<string | null>>;
   setSelectedContributor: React.Dispatch<React.SetStateAction<Contributor | null>>;
   setActivityData: React.Dispatch<React.SetStateAction<ActivityStats | null>>;
+  setPrConversionData: React.Dispatch<React.SetStateAction<PrConversionStats | null>>;
 
   clearContext: React.Dispatch<React.SetStateAction<void>>;
   clearSelectedRepoInfo: React.Dispatch<React.SetStateAction<void>>;
@@ -54,6 +57,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   const [selectedContributorId, setSelectedContributorId] = useState<string | null>(null);
   const [selectedContributor, setSelectedContributor] = useState<Contributor | null>(null);
   const [activityData, setActivityData] = useState<ActivityStats | null>(null);
+  const [prConversionData, setPrConversionData] = useState<PrConversionStats | null>(null);
 
   const clearContext = () => {
     setSidebarStatus(false);
@@ -66,12 +70,14 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
     setSelectedContributorId(null);
     setSelectedContributor(null);
     setActivityData(null);
+    setPrConversionData(null);
   };
 
   const clearSelectedRepoInfo = () => {
     setSelectedRepo(null);
     setSelectedRepoContributors(null);
     setActivityData(null)
+    setPrConversionData(null)
   }
 
   const value = useMemo(
@@ -87,6 +93,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       selectedContributorId,
       selectedContributor,
       activityData,
+      prConversionData,
       setSidebarStatus,
       setSessionDialogStatus,
       setGlobalLoading,
@@ -98,11 +105,12 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       setSelectedContributorId,
       setSelectedContributor,
       setActivityData,
+      setPrConversionData,
 
       clearContext,
       clearSelectedRepoInfo
     }),
-    [sidebarStatus, sessionDialogStatus, globalLoading, user, userRepos, publicRepos, selectedRepo, selectedRepoContributors, selectedContributorId, selectedContributor, activityData]
+    [sidebarStatus, sessionDialogStatus, globalLoading, user, userRepos, publicRepos, selectedRepo, selectedRepoContributors, selectedContributorId, selectedContributor, activityData, prConversionData]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

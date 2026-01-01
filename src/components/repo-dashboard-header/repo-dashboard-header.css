@@ -11,7 +11,10 @@
 
     .secondary-info-container {
         display: flex !important;
-        flex-direction: column !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: var(--radius-sm);
+        align-items: center;
     }
 
     .bottom-container {
@@ -28,9 +31,7 @@
         margin-left: 0!important;
     }
 
-    .secondary-info-container{
-        flex-direction: row!important;
-    }
+    /* moved to above: ensure items wrap on narrow screens to avoid overflow */
 }
 
 .dashboard-header-container {
@@ -70,6 +71,16 @@
     flex-direction: row;
     gap: var(--radius-sm);
     align-items: center;
+    min-width: 0;
+}
+
+.secondary-info-item > * {
+    min-width: 0;
+}
+
+.secondary-info-item span {
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .language-container {

@@ -25,7 +25,6 @@ export function useWindowSize(debounceMs = 10): WindowSize {
       }, debounceMs);
     };
 
-    // set once on mount (in case of hydration differences)
     onResize();
 
     window.addEventListener('resize', onResize, { passive: true });

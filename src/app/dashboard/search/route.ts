@@ -7,7 +7,6 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const q = searchParams.get('q') ?? '';
 
-    // Call your existing BFF search endpoint
     const http = new HttpService();
     const res = await http.get(
         `${API_DASHBOARD_ENDPOINT}/search?searchTerm=${encodeURIComponent(q)}`

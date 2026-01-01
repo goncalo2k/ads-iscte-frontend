@@ -23,7 +23,6 @@ export default function GlobalError({
     reset: () => void
 }) {
     return (
-        // global-error must include html and body tags
         <html lang="en" className="dark">
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 <AppProvider initialUser={null} initialUserRepos={[]}>

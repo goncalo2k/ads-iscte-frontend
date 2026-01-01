@@ -6,16 +6,19 @@ import { useAppContext } from '@/app/provider';
 import { Contributor } from '@/types/contributor.model';
 import { Skeleton } from '../ui/skeleton';
 import { useEffect } from 'react';
-import { Check, Circle, CircleX, GitPullRequestArrow } from 'lucide-react';
+import { Check, Circle, CircleX, GitPullRequestArrow, Minus, Plus } from 'lucide-react';
 import ActivityChart from '../charts/activity-chart/activity-chart';
 import { buildMonthlyActivitySeries } from '@/lib/activity.utils';
+import { Spinner } from '../ui/spinner';
+import CustomPieChart from '../charts/pie-chart/pie-chart';
 
 type RepoSummaryContainerProps = {
-    loadingStats: { loadingFastStats: boolean, loadingSlowStats: boolean };
+    loadingStats: { loadingFastStats: boolean, loadingSlowStats: boolean, loadingGraphs: boolean };
+    errors: { statsError: null | string, graphsError: null | string }
 };
 
 export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
-    const { selectedContributorId, selectedContributor, selectedRepo, selectedRepoContributors, activityData } = useAppContext();
+    const { selectedContributorId, selectedContributor, selectedRepoContributors, activityData, prConversionData } = useAppContext();
     let initialContributor
     if (selectedRepoContributors && selectedRepoContributors && selectedRepoContributors.length > 0) initialContributor = selectedRepoContributors.find((c: Contributor) => c.node_id === selectedContributorId);
 
@@ -65,20 +68,31 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                                 </div>
                                 <div className='stats-item'>
                                     <span className='secondary-text'>Additions</span>
-                                    {!props.loadingStats.loadingSlowStats && selectedContributor && <span className='additions-label'>+{selectedContributor!.additions || 0}</span>}
+                                    {!props.loadingStats.loadingSlowStats && selectedContributor && <div className='double-stat-item-container'>
+                                        <Plus className='double-stat-icon additions-label'/><span className='additions-label'>{selectedContributor!.additions || 0}</span>
+                                    </div>}
                                     {props.loadingStats.loadingSlowStats && <Skeleton className="stats-skeleton" />}
                                 </div>
                                 <div className='stats-item'>
                                     <span className='secondary-text'>Deletions</span>
-                                    {!props.loadingStats.loadingSlowStats && selectedContributor && <span className='deletions-label'>-{selectedContributor!.deletions || 0}</span>}
+                                    {!props.loadingStats.loadingSlowStats && selectedContributor && <div className='double-stat-item-container'>
+                                        <Minus className='double-stat-icon deletions-label' /><span className='deletions-label'>{selectedContributor!.deletions || 0}</span>
+                                    </div>}
                                     {props.loadingStats.loadingSlowStats && <Skeleton className="stats-skeleton" />}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div className='graphs-container'>
+                        <div className='activity-stats-container'>
+                            {props.loadingStats.loadingGraphs && <Spinner className='activity-graph-loader' />}
+                            {!props.loadingStats.loadingGraphs && !props.errors.graphsError && <ActivityChart data={activityPoints} />}
+                        </div>
 
-                    <div className='activity-stats-container internal-container'>
-                        <ActivityChart data={activityPoints}/>
+                        <div className='conversion-rate-container'>
+                            {props.loadingStats.loadingGraphs && <Spinner className='activity-graph-loader' />}
+                            {!props.loadingStats.loadingGraphs && !props.errors.graphsError && prConversionData && <CustomPieChart data={prConversionData} />}
+                        </div>
                     </div>
                 </div>
             )}
