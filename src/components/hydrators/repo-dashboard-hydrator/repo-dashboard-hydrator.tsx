@@ -13,7 +13,7 @@ export default function RepoDashboardHydrator({
 
     useEffect(() => {
         setSelectedRepo(selectedRepo);
-        setSelectedRepoContributors(selectedRepo.contributors);
+        setSelectedRepoContributors(selectedRepo.contributors || null);
     }, [selectedRepo, setSelectedRepo, setSelectedRepoContributors]);
 
     return null;

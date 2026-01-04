@@ -1,7 +1,5 @@
 import { ActivityPoint } from '@/types/activity-point.model';
 import { SearchWeeklyActivity } from '@/types/activity-stats.model';
-import { PieChartChell } from '@/types/pie-chart-cell.model';
-import { PrConversionStats } from '@/types/pr-conversion-stats.model';
 
 const monthKey = (dt: Date) => {
     const y = dt.getUTCFullYear();

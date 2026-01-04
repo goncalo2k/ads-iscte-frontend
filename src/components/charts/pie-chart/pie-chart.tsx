@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { useMemo } from 'react';
@@ -74,6 +75,7 @@ export default function CustomPieChart({
         return base;
     }, [data, labels, mode]);
 
+    
     const legendFormatter = (value: string, entry: any) => {
         if (!showPercentInLegend) return value;
         const payload: PieDatum | undefined = entry?.payload;
@@ -95,7 +97,7 @@ export default function CustomPieChart({
         return [`${value} PRs (${pct.toFixed(2)}%)`];
     };
 
-    let userHasPrs = data.closedUnmergedRate !== 0 || data.mergedRate !== 0 || data.completionRate !== 0;
+    const userHasPrs = data.closedUnmergedRate !== 0 || data.mergedRate !== 0 || data.completionRate !== 0;
     return (<>
         {userHasPrs && <div className="activity-chart-card">
             <div className="activity-chart-title">{title}</div>

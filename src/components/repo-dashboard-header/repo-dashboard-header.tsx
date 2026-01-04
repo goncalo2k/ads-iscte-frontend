@@ -5,7 +5,6 @@ import './repo-dashboard-header.css';
 import { useAppContext } from '@/app/provider';
 import Divider from '../divider/divider';
 import { Calendar, Eye, GitFork, Star, Users } from 'lucide-react';
-import { Contributor } from '@/types/contributor.model';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
 export default function RepoDashboardHeader() {
@@ -17,10 +16,10 @@ export default function RepoDashboardHeader() {
     let lastUpdatedAt = 'Updated a long time ago...';
 
     if (selectedRepo && selectedRepo!.contributors) {
-        let currentDate: Date = new Date();
+        const currentDate: Date = new Date();
         if (!!selectedRepo!.updated_at) {
-            let seconds = currentDate.getTime() - new Date(selectedRepo!.updated_at).getTime();
-            let minutes =
+            const seconds = currentDate.getTime() - new Date(selectedRepo!.updated_at).getTime();
+            const minutes =
                 Math.floor(seconds / 60000)
             if (minutes === 0 && seconds >= 0) {
                 lastUpdatedAt = `Updated ${Math.floor(seconds/1000)} second${seconds/1000 > 1 ? 's' : ''} ago`;
@@ -28,7 +27,7 @@ export default function RepoDashboardHeader() {
             else if (minutes < 60) {
                 lastUpdatedAt = `Updated ${minutes} minute${minutes > 1 ? 's' : ''} ago`;
             } else {
-                let hours = Math.floor(minutes / 60);
+                const hours = Math.floor(minutes / 60);
                 if (hours > 24) {
                     lastUpdatedAt = `Updated ${Math.floor(hours / 24)} day${hours / 24 > 1 ? 's' : ''} ago`;
                 } else { lastUpdatedAt = `Updated ${hours} hour${hours > 1 ? 's' : ''} ago`; }

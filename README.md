@@ -29,8 +29,6 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+The app is currently deployed on Cloudflare Workers on [https://ads-iscte-frontend.goncalo-miranda-cplx.workers.dev/](https://ads-iscte-frontend.goncalo-miranda-cplx.workers.dev/).
+The backend is hosted on Render, on [https://ads-iscte-backend.onrender.com](https://ads-iscte-backend.onrender.com) and can be manage on [its dashboard](https://dashboard.render.com/web/srv-d5dacjfgi27c739godj0/deploys/dep-d5dack7gi27c739goe60).

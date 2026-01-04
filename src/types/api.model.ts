@@ -4,21 +4,21 @@ import { User } from "./user.model";
 import { ActivityStats } from "./activity-stats.model";
 import { PrConversionStats } from "./pr-conversion-stats.model";
 
-export interface DashboardResponse extends ApiResponse<{ user: User, repos: Repository[] }> { }
+export type DashboardResponse = ApiResponse<{ user: User, repos: Repository[] }>;
 
-export interface SessionStatusResponse extends ApiResponse<{ user: Partial<User>, expirationTime: number }> { }
+export type SessionStatusResponse = ApiResponse<{ user: Partial<User>, expirationTime: number }>;
 
-export interface UserRepositoryResponse extends ApiResponse<Repository[]> { }
+export type UserRepositoryResponse = ApiResponse<Repository[]>;
 
-export interface RepositorySearchResponse extends ApiResponse<Repository> { }
+export type RepositorySearchResponse = ApiResponse<Repository>;
 
-export interface UserStatsResponse extends ApiResponse<Partial<Contributor>> { }
+export type UserStatsResponse = ApiResponse<Partial<Contributor>>;
 
-export interface UserActivityResponse extends ApiResponse<ActivityStats> { }
+export type UserActivityResponse = ApiResponse<ActivityStats>;
 
-export interface UserPrConversionResponse extends ApiResponse<PrConversionStats> { }
+export type UserPrConversionResponse = ApiResponse<PrConversionStats>;
 
-export interface ContributorsResponse extends ApiResponse<{ nextPage: number | null, hasMore: boolean, contributors: Contributor[] }> { }
+export type ContributorsResponse = ApiResponse<{ nextPage: number | null, hasMore: boolean, contributors: Contributor[] }>;
 
 export interface ApiResponse<T> {
   status?: number;

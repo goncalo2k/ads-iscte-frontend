@@ -7,18 +7,25 @@ import { Github } from 'lucide-react';
 
 import { Button } from '../ui/button';
 import { useAppContext } from '@/app/provider';
-import { setGlobal } from 'next/dist/trace';
 
 export default function LoginComponent() {
-    const {setIsLogout, setGlobalLoading} = useAppContext();
+    console.log('[mw env]', {
+        NEXT_AUTH_TOKEN_NAME: process.env.NEXT_AUTH_TOKEN_NAME,
+        NEXT_PUBLIC_API_BASE: process.env.NEXT_PUBLIC_API_BASE,
+    });
+
+    const { setIsLogout, setGlobalLoading } = useAppContext();
     const apiBase = process.env.NEXT_PUBLIC_API_BASE!;
+    console.log('apiBase', { apiBase: apiBase });
     const githubAuthEndpoint = process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL!;
     const loginEndpoint = "/login";
 
-    const handleLogin = () => {
+    let loginUrl = `${apiBase}${githubAuthEndpoint}${loginEndpoint}`;
+    console.log('loginUrl', loginUrl);
+    let handleLogin = (loginUrl: string) => {
         setIsLogout(false);
         setGlobalLoading(true);
-        window.location.href = `${apiBase}${githubAuthEndpoint}${loginEndpoint}`;
+        window.location.href = loginUrl;
     };
 
     return (
@@ -29,7 +36,7 @@ export default function LoginComponent() {
             <span className="text-xl">Welcome to the GitDash</span>
             <span className="secondary-text">Login to look into your stats!</span>
             <div className='button-container'>
-                <Button className="button" onClick={handleLogin}>
+                <Button className="button" onClick={() => { handleLogin(loginUrl) }}>
                     <span>Log in to Github</span>
                 </Button>
             </div>

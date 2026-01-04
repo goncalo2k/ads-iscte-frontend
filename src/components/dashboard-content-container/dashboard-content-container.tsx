@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -16,7 +18,7 @@ import { ActivityStats } from '@/types/activity-stats.model';
 import { PrConversionStats } from '@/types/pr-conversion-stats.model';
 
 export default function RepoDashboardContentContainer() {
-    const { selectedRepo, selectedContributorId, selectedContributor, prConversionData, setSelectedContributor, setSelectedContributorId, setActivityData, setPrConversionData } = useAppContext();
+    const { selectedRepo, selectedContributorId, selectedContributor, setSelectedContributor, setSelectedContributorId, setActivityData, setPrConversionData } = useAppContext();
     const { width } = useWindowSize();
     const [loadingFastStats, setLoadingFastStats] = useState(false);
     const [loadingGraphs, setLoadingGraphs] = useState(false);
@@ -37,7 +39,7 @@ export default function RepoDashboardContentContainer() {
         window.location.href = '/dashboard';
     }
 
-    const fetchFastStats = async (ac: any) => {
+    const fetchFastStats = async (ac: AbortController) => {
         setLoadingFastStats(true);
         const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributorId}/stats`;
 
@@ -60,7 +62,7 @@ export default function RepoDashboardContentContainer() {
         return data as Contributor;
     };
 
-    const fetchSlowStats = async (ac: any) => {
+    const fetchSlowStats = async (ac: AbortController) => {
         setLoadingSlowStats(true);
         const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributorId}/slow-stats`;
 
@@ -83,7 +85,7 @@ export default function RepoDashboardContentContainer() {
         return data as Contributor;
     };
 
-    const fetchStats = async (ac: any) => {
+    const fetchStats = async (ac: AbortController) => {
         try {
             setStatsError(null);
 
@@ -101,7 +103,7 @@ export default function RepoDashboardContentContainer() {
         }
     };
 
-    const fetchActivityGraph = async (ac: any) => {
+    const fetchActivityGraph = async (ac: AbortController) => {
         const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributorId}/activity`;
 
         const res = await fetch(url, {
@@ -123,7 +125,7 @@ export default function RepoDashboardContentContainer() {
         return data as ActivityStats;
     }
 
-    const fetchPrConversionGraph = async (ac: any) => {
+    const fetchPrConversionGraph = async (ac: AbortController) => {
         const url = `${API_BASE}${DASHBOARD_BASE}/repository/${selectedRepo!.full_name}/contributors/${selectedContributor?.userName}/pr-conversion`;
 
         const res = await fetch(url, {
@@ -145,7 +147,7 @@ export default function RepoDashboardContentContainer() {
         return data as PrConversionStats;
     }
 
-    const fetchGraphs = async (ac: any) => {
+    const fetchGraphs = async (ac: AbortController) => {
         try {
             setGraphsError(null);
             setLoadingGraphs(true);

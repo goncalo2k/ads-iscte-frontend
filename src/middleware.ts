@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
                 path: '/',
                 httpOnly: true,
                 secure: true,
-                sameSite: 'lax',
+                sameSite: 'none',
                 expires: new Date(0),
             });
             return response;

@@ -1,19 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import './header.css';
 
 import React from 'react';
 import { useAppContext } from '@/app/provider';
-import { DoorOpen, Info, Users } from 'lucide-react';
+import { DoorOpen, Users } from 'lucide-react';
 import CodeContainer from '../code-container/code-container';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { usePathname } from 'next/navigation';
-import { useSessionWatcher } from '@/hooks/useSessionWatcher';
 
 export default function Header() {
     const { user, selectedContributor, sidebarStatus, setIsLogout, setGlobalLoading, setSelectedContributor, setSelectedContributorId, clearContext, setSidebarStatus } = useAppContext();
     const { width } = useWindowSize();
-    const { isExpired } = useSessionWatcher();
 
     const handleRedirectToHome = () => {
         if (selectedContributor) { setSelectedContributor(null); setSelectedContributorId(null); }

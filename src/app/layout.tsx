@@ -6,6 +6,7 @@ import { AppProvider } from "./provider";
 import { DashboardResponse } from "@/types/api.model";
 import HttpService from "./services/http/http.service";
 import SessionExpiredDialog from '@/components/session-expiration-dialog/session-expiration-dialog';
+import { Repository } from '@/types/repository.model';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,6 +21,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "GitDash",
   description: "Checkout your GitHub stats at a glance.",
+  icons: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWdpdGh1Yi1pY29uIGx1Y2lkZS1naXRodWIiPjxwYXRoIGQ9Ik0xNSAyMnYtNGE0LjggNC44IDAgMCAwLTEtMy41YzMgMCA2LTIgNi01LjUuMDgtMS4yNS0uMjctMi40OC0xLTMuNS4yOC0xLjE1LjI4LTIuMzUgMC0zLjUgMCAwLTEgMC0zIDEuNS0yLjY0LS41LTUuMzYtLjUtOCAwQzYgMiA1IDIgNSAyYy0uMyAxLjE1LS4zIDIuMzUgMCAzLjVBNS40MDMgNS40MDMgMCAwIDAgNCA5YzAgMy41IDMgNS41IDYgNS41LS4zOS40OS0uNjggMS4wNS0uODUgMS42NS0uMTcuNi0uMjIgMS4yMy0uMTUgMS44NXY0Ii8+PHBhdGggZD0iTTkgMThjLTQuNTEgMi01LTItNy0yIi8+PC9zdmc+'
 };
 
 const API_DASHBOARD_ENDPOINT = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL!;
@@ -31,7 +33,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   let initialUser = null;
-  let initialUserRepos: any[] = [];
+  let initialUserRepos: Repository[] = [];
   try {
     const http = new HttpService();
     const res = await http.get<DashboardResponse>(API_DASHBOARD_ENDPOINT);

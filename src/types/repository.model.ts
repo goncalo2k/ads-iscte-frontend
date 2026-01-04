@@ -1,3 +1,5 @@
+import { Contributor } from "./contributor.model";
+
 export interface Repository {
     id: number;
     name: string;
@@ -14,7 +16,7 @@ export interface Repository {
     stargazers_count: number;
     watchers_count: number;
     contributors_count?: number;
-    contributors?: any;
+    contributors?: Contributor[];
     open_issues?: number;
     open_prs?: number;
     commit_count?: number;

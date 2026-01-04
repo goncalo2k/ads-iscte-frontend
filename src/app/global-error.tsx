@@ -15,13 +15,7 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
-export default function GlobalError({
-    error,
-    reset,
-}: {
-    error: Error & { digest?: string }
-    reset: () => void
-}) {
+export default function GlobalError() {
     return (
         <html lang="en" className="dark">
             <body className={`${geistSans.variable} ${geistMono.variable}`}>

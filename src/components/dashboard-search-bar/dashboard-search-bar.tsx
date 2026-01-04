@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import './dashboard-search-bar.css';
@@ -15,11 +16,12 @@ import CodeContainer from '../code-container/code-container';
 
 
 export default function DashboardSearchBar() {
-    const { userRepos, setSelectedRepo, publicRepos, setPublicRepos, setGlobalLoading } = useAppContext();
+    const { userRepos, setSelectedRepo, publicRepos, setPublicRepos } = useAppContext();
     const router = useRouter();
 
     const [term, setTerm] = useState('');
     const [loadingWeb, setLoadingWeb] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [error, setError] = useState<string | null>(null);
     const abortRef = useRef<AbortController | null>(null);
 
