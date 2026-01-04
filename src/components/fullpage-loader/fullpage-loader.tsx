@@ -1,6 +1,5 @@
 'use client';
 
-import { useAppContext } from '@/app/provider';
 import { Spinner } from '../ui/spinner';
 import './fullpage-loader.css';
 

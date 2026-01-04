@@ -31,9 +31,9 @@ export default function PageContainer({ children }: PageContainerProps) {
 
     return (
         <div className="page-container">
-            {!isHome && <Header />}
+            {!isExpired && !isHome && <Header />}
             {!isExpired && !globalLoading && sidebarStatus && isRepoDashboard && <RepoContributorsNavBar isSidebar={true} />}
-            {!globalLoading && children}
+            {(!isExpired || isHome) && !globalLoading && children}
             {globalLoading && <FullpageLoader />}
         </div>
     );

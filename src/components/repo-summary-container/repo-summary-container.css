@@ -131,10 +131,14 @@
     text-align: center;
     align-content: center;
 }
+.activity-stats-container.loading,.conversion-rate-container.loading {
+    justify-items: center;
+}
 
 .activity-graph-loader {
-    height: 100%;
-    width: 100%;
+    align-self: center;
+    height: 20%;
+    width: 20%;
 }
 
 .graphs-container {

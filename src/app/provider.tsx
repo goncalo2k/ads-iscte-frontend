@@ -7,6 +7,7 @@ import { User } from "@/types/user.model";
 import React, { createContext, useContext, useMemo, useState } from "react";
 
 type AppContextType = {
+  isLogout: boolean;
   sidebarStatus: boolean;
   sessionDialogStatus: boolean;
   globalLoading: boolean;
@@ -21,6 +22,7 @@ type AppContextType = {
   activityData: ActivityStats | null;
   prConversionData: PrConversionStats | null;
 
+  setIsLogout: React.Dispatch<React.SetStateAction<boolean>>;
   setSidebarStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setSessionDialogStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setGlobalLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,6 +47,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
   children: React.ReactNode, initialUser: User | null;
   initialUserRepos: Repository[];
 }) {
+  const [isLogout, setIsLogout] = useState<boolean>(false);
   const [sidebarStatus, setSidebarStatus] = useState<boolean>(false);
   const [sessionDialogStatus, setSessionDialogStatus] = useState<boolean>(false);
   const [globalLoading, setGlobalLoading] = useState<boolean>(false);
@@ -82,6 +85,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
 
   const value = useMemo(
     () => ({
+      isLogout,
       sidebarStatus,
       sessionDialogStatus,
       globalLoading,
@@ -94,6 +98,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       selectedContributor,
       activityData,
       prConversionData,
+      setIsLogout,
       setSidebarStatus,
       setSessionDialogStatus,
       setGlobalLoading,
@@ -110,7 +115,7 @@ export function AppProvider({ children, initialUser, initialUserRepos }: {
       clearContext,
       clearSelectedRepoInfo
     }),
-    [sidebarStatus, sessionDialogStatus, globalLoading, user, userRepos, publicRepos, selectedRepo, selectedRepoContributors, selectedContributorId, selectedContributor, activityData, prConversionData]
+    [isLogout, sidebarStatus, sessionDialogStatus, globalLoading, user, userRepos, publicRepos, selectedRepo, selectedRepoContributors, selectedContributorId, selectedContributor, activityData, prConversionData]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

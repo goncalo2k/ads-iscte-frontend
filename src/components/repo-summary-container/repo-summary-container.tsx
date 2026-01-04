@@ -68,7 +68,7 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                                 <div className='stats-item'>
                                     <span className='secondary-text'>Additions</span>
                                     {!props.loadingStats.loadingSlowStats && selectedContributor && <div className='double-stat-item-container'>
-                                        <Plus className='double-stat-icon additions-label'/><span className='additions-label'>{selectedContributor!.additions || 0}</span>
+                                        <Plus className='double-stat-icon additions-label' /><span className='additions-label'>{selectedContributor!.additions || 0}</span>
                                     </div>}
                                     {props.loadingStats.loadingSlowStats && <Skeleton className="stats-skeleton" />}
                                 </div>
@@ -83,12 +83,12 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
                         </div>
                     </div>
                     <div className='graphs-container'>
-                        <div className='activity-stats-container'>
+                        <div className={'activity-stats-container' + (props.loadingStats.loadingGraphs ? ' loading' : '')}>
                             {props.loadingStats.loadingGraphs && <Spinner className='activity-graph-loader' />}
                             {!props.loadingStats.loadingGraphs && !props.errors.graphsError && <ActivityChart data={activityPoints} />}
                         </div>
 
-                        <div className='conversion-rate-container'>
+                        <div className={'conversion-rate-container' + (props.loadingStats.loadingGraphs ? ' loading' : '')}>
                             {props.loadingStats.loadingGraphs && <Spinner className='activity-graph-loader' />}
                             {!props.loadingStats.loadingGraphs && !props.errors.graphsError && prConversionData && <CustomPieChart data={prConversionData} />}
                         </div>

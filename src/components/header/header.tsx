@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 import { useSessionWatcher } from '@/hooks/useSessionWatcher';
 
 export default function Header() {
-    const { user, selectedContributor, sidebarStatus, setGlobalLoading, setSelectedContributor, setSelectedContributorId, clearContext, setSidebarStatus } = useAppContext();
+    const { user, selectedContributor, sidebarStatus, setIsLogout, setGlobalLoading, setSelectedContributor, setSelectedContributorId, clearContext, setSidebarStatus } = useAppContext();
     const { width } = useWindowSize();
     const { isExpired } = useSessionWatcher();
 
@@ -29,6 +29,7 @@ export default function Header() {
 
     const handleLogout = async () => {
         setGlobalLoading(true);
+        setIsLogout(true);
         await fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL}/logout`, {
             method: "GET",
             credentials: "include"
@@ -43,7 +44,7 @@ export default function Header() {
 
     return (
         <>
-            {!isExpired && user && <div className='header-container'>
+            {user && <div className='header-container'>
                 <div className='left-container' onClick={handleRedirectToHome}>
                     <CodeContainer />
                     <div className='label'><span>GitDash</span></div>
