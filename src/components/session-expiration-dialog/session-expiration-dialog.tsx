@@ -17,7 +17,7 @@ export default function SessionExpiredDialog() {
   const [busy, setBusy] = useState(false);
 
   const onRefresh = useCallback(async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL}/logout`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL}/logout`, {
       method: "GET",
       credentials: "include"
     });

@@ -23,7 +23,6 @@ export default function RepoSummaryContainer(props: RepoSummaryContainerProps) {
     if (selectedRepoContributors && selectedRepoContributors && selectedRepoContributors.length > 0) initialContributor = selectedRepoContributors.find((c: Contributor) => c.node_id === selectedContributorId);
 
     const activityPoints = buildMonthlyActivitySeries(activityData?.weeks || []);
-    useEffect(() => { console.log('selectedContributor', selectedContributor, 'selectedContributorId', selectedContributorId) }, [selectedContributor, selectedContributorId])
     return (
         <>
             {selectedContributorId && (

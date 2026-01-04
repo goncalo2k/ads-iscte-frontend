@@ -20,6 +20,7 @@
     flex-direction: row;
     gap: var(--radius-md);
     padding: var(--radius-xs);
+    align-items: center;
 }
 
 .left-container:hover {

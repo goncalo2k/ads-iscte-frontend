@@ -98,7 +98,6 @@ export default function RepoDashboardContentContainer() {
         } finally {
             setLoadingSlowStats(false);
             setLoadingFastStats(false);
-            console.log('selectedContributor', selectedContributor)
         }
     };
 
