@@ -20,9 +20,9 @@ export default function LoginComponent() {
     const githubAuthEndpoint = process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL!;
     const loginEndpoint = "/login";
 
-    let loginUrl = `${apiBase}${githubAuthEndpoint}${loginEndpoint}`;
+    const loginUrl = `${apiBase}${githubAuthEndpoint}${loginEndpoint}`;
     console.log('loginUrl', loginUrl);
-    let handleLogin = (loginUrl: string) => {
+    const handleLogin = (loginUrl: string) => {
         setIsLogout(false);
         setGlobalLoading(true);
         window.location.href = loginUrl;
