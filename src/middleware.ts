@@ -37,32 +37,31 @@ async function verifySession(request: NextRequest, cookieValue: string | undefin
 }
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const cookieValue = request.cookies.get(AUTH_COOKIE_NAME)?.value;
+    const { pathname } = request.nextUrl;
 
-  if (shouldPublicRedirect(pathname) && cookieValue) {
-    const { valid } = await verifySession(request, cookieValue);
-    if (valid) return NextResponse.redirect(new URL(PROTECTED_PREFIX, request.url));
-  }
+    const cookieValue = request.cookies.get(AUTH_COOKIE_NAME)?.value;
 
-  if (isProtected(pathname)) {
-    const { valid } = await verifySession(request, cookieValue);
-    if (!valid) {
-      const response = NextResponse.redirect(new URL('/', request.url));
-      response.cookies.set({
-        name: AUTH_COOKIE_NAME,
-        value: '',
-        path: '/',
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        expires: new Date(0),
-      });
-      return response;
+    if (isProtected(pathname)) {
+        const { valid } = await verifySession(request, cookieValue);
+        if (!valid) {
+            const response = NextResponse.redirect(new URL('/', request.url));
+            response.cookies.set({
+                name: AUTH_COOKIE_NAME,
+                value: '',
+                path: '/',
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                expires: new Date(0),
+            });
+            return response;
+        }
+        if (valid && shouldPublicRedirect(pathname)) {
+            return NextResponse.redirect(new URL(PROTECTED_PREFIX, request.url));
+        }
+        return NextResponse.next();
     }
-  }
-
-  return NextResponse.next();
+    return NextResponse.next();
 }
 
 export const config = {

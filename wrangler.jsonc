@@ -24,11 +24,11 @@
       "persist": true,
       "head_sampling_rate": 1
     },
-  },
-  "vars": {
-    "NEXT_PUBLIC_API_BASE": "https://ads-iscte-backend.onrender.com",
-    "NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL": "/auth/github",
-    "NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL": "/github/dashboard",
-    "NEXT_AUTH_TOKEN_NAME": "ghdashauth"
+    "vars": {
+      "NEXT_PUBLIC_API_BASE": "https://ads-iscte-backend.onrender.com",
+      "NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL": "/auth/github",
+      "NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL": "/github/dashboard",
+      "NEXT_AUTH_TOKEN_NAME": "ghdashauth"
+    }
   }
 }
