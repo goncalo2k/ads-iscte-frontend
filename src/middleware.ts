@@ -27,7 +27,7 @@ async function verifySession(request: NextRequest, cookieValue: string | undefin
             },
             cache: 'no-store',
         });
-        
+
         if (!res.ok) return { valid: false };
         return { valid: true };
     } catch (error) {
@@ -40,10 +40,9 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const cookieValue = request.cookies.get(AUTH_COOKIE_NAME)?.value;
-    
-    const { valid } = await verifySession(request, cookieValue);
 
     if (isProtected(pathname)) {
+        const { valid } = await verifySession(request, cookieValue);
         if (!valid) {
             const response = NextResponse.redirect(new URL('/', request.url));
             response.cookies.set({
@@ -57,13 +56,11 @@ export async function middleware(request: NextRequest) {
             });
             return response;
         }
+        if (valid && shouldPublicRedirect(pathname)) {
+            return NextResponse.redirect(new URL(PROTECTED_PREFIX, request.url));
+        }
         return NextResponse.next();
     }
-
-    if (valid && shouldPublicRedirect(pathname)) {
-        return NextResponse.redirect(new URL(PROTECTED_PREFIX, request.url));
-    }
-
     return NextResponse.next();
 }
 

@@ -29,14 +29,19 @@ export default function Header() {
     const handleLogout = async () => {
         setGlobalLoading(true);
         setIsLogout(true);
-        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL}/logout`, {
-            method: "GET",
-            credentials: "include"
-        });
-
-        clearContext();
-        setGlobalLoading(false);
-        window.location.href = '/'
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_API_BASE}${process.env.NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL}/logout`, {
+                method: "GET",
+                credentials: "include"
+            });
+            clearContext();
+            setGlobalLoading(false);
+            window.location.href = '/'
+        } catch {
+            clearContext();
+            setGlobalLoading(false);
+            window.location.href = '/'
+        }
     }
 
     const openContributorsSideBar = () => { setSidebarStatus(!sidebarStatus) };
