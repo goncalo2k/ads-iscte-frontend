@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@opennextjs/cloudflare':
+        specifier: ^1.14.7
+        version: 1.14.7(next@15.5.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.93.2))(wrangler@4.54.0)
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.0(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -60,9 +63,6 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.1
-      '@opennextjs/cloudflare':
-        specifier: ^1.14.7
-        version: 1.14.7(next@15.5.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.93.2))(wrangler@4.54.0)
       '@types/node':
         specifier: ^20
         version: 20.19.19
