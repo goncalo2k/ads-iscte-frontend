@@ -16,7 +16,7 @@ import CodeContainer from '../code-container/code-container';
 
 
 export default function DashboardSearchBar() {
-    const { userRepos, setSelectedRepo, publicRepos, setPublicRepos } = useAppContext();
+    const { user, userRepos, setSelectedRepo, publicRepos, setPublicRepos } = useAppContext();
     const router = useRouter();
 
     const [term, setTerm] = useState('');
@@ -70,6 +70,7 @@ export default function DashboardSearchBar() {
         };
     }, [term]);
 
+    console.log('user:', user, 'userRepos', userRepos, 'publicRepos', publicRepos)
     return (
         <div className='dashboard-search-container'>
             <div className='title-container'>
