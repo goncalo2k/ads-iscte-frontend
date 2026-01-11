@@ -24,11 +24,11 @@ async function verifySession(request: NextRequest, cookieValue: string | undefin
             credentials: "include",
             cache: 'no-store',
         });
-
+        console.log(['[mw] verifySession response:'], res)
         if (!res.ok) return { valid: false };
         return { valid: true };
     } catch (error) {
-        console.log('Error verifying session:', error);
+        console.log('[mw] Error verifying session:', error);
         return { valid: false };
     }
 }
