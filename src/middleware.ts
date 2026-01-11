@@ -17,6 +17,7 @@ function isPublicPath(pathname: string) {
 }
 
 async function verifySession(request: NextRequest, cookieValue: string | undefined) {
+    console.log(['[mw] verifySession cookieValue:'], cookieValue)
     if (!cookieValue) return { valid: false };
 
     try {
@@ -40,7 +41,7 @@ export async function middleware(request: NextRequest) {
 
     console.log("[mw] pathname:", pathname);
     console.log("[mw] cookieValue:", cookieValue);
-    console.log("[mw] :", isProtected(pathname));
+    console.log("[mw] isProtected:", isProtected(pathname));
     if (isProtected(pathname)) {
         const { valid } = await verifySession(request, cookieValue);
         console.log("[mw-protected] valid?:", valid);
