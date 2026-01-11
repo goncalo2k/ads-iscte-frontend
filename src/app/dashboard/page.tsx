@@ -9,6 +9,7 @@ import GlobalLoadingHydrator from '@/components/hydrators/global-loading-hydrato
 const API_DASHBOARD_ENDPOINT = process.env.NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL!;
 
 export default async function DashboardPage() {
+    console.log('dashboard-page: API_DASHBOARD_ENDPOINT',API_DASHBOARD_ENDPOINT);
     const httpService: HttpService = new HttpService();
     let isError = false;
     const getUserInitialDashboard = async (): Promise<DashboardResponse> => {

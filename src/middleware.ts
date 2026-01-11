@@ -12,7 +12,7 @@ function isProtected(pathname: string) {
     return pathname === PROTECTED_PREFIX || pathname.startsWith(`${PROTECTED_PREFIX}/`);
 }
 
-function shouldPublicRedirect(pathname: string) {
+function isPublicPath(pathname: string) {
     return PUBLIC_REDIRECTS.has(pathname);
 }
 
@@ -22,9 +22,6 @@ async function verifySession(request: NextRequest, cookieValue: string | undefin
     try {
         const res = await fetch(API_BASE_ENDPOINT + AUTH_VERIFY_ENDPOINT, {
             credentials: "include",
-            headers: {
-                cookie: `${AUTH_COOKIE_NAME}=${cookieValue}`,
-            },
             cache: 'no-store',
         });
 
@@ -41,11 +38,15 @@ export async function middleware(request: NextRequest) {
 
     const cookieValue = request.cookies.get(AUTH_COOKIE_NAME)?.value;
 
+    console.log("[mw] pathname:", pathname);
+    console.log("[mw] cookieValue:", cookieValue);
+    console.log("[mw] :", isProtected(pathname));
     if (isProtected(pathname)) {
         const { valid } = await verifySession(request, cookieValue);
+        console.log("[mw-protected] valid?:", valid);
         if (!valid) {
             const response = NextResponse.redirect(new URL('/', request.url));
-            response.cookies.set({
+            /* response.cookies.set({
                 name: AUTH_COOKIE_NAME,
                 value: '',
                 path: '/',
@@ -53,10 +54,10 @@ export async function middleware(request: NextRequest) {
                 secure: true,
                 sameSite: 'none',
                 expires: new Date(0),
-            });
+            }); */
             return response;
         }
-        if (valid && shouldPublicRedirect(pathname)) {
+        if (valid && isPublicPath(pathname)) {
             return NextResponse.redirect(new URL(PROTECTED_PREFIX, request.url));
         }
         return NextResponse.next();
