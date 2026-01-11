@@ -8,7 +8,8 @@
   ],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
   },
   "observability": {
     "enabled": false,
@@ -30,5 +31,5 @@
     "NEXT_PUBLIC_GITHUB_AUTHENTICATION_ENDPOINT_URL": "/auth/github",
     "NEXT_PUBLIC_DASHBOARD_BASE_ENDPOINT_URL": "/github/dashboard",
     "NEXT_AUTH_TOKEN_NAME": "ghdashauth"
-  }
+  },
 }
