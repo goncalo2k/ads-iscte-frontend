@@ -48,15 +48,6 @@ export async function middleware(request: NextRequest) {
         console.log("[mw-protected] valid?:", valid);
         if (!valid) {
             const response = NextResponse.redirect(new URL('/', request.url));
-            /* response.cookies.set({
-                name: AUTH_COOKIE_NAME,
-                value: '',
-                path: '/',
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                expires: new Date(0),
-            }); */
             return response;
         }
         if (valid && isPublicPath(pathname)) {

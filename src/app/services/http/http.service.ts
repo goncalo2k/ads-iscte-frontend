@@ -4,16 +4,28 @@ import { HttpMethod } from "./http.service.consts";
 
 class HttpService {
     private baseUrl: string;
+    private authCookieName = (process?.env?.NEXT_AUTH_TOKEN_NAME as string)!;
 
     constructor(baseUrl?: string) {
         this.baseUrl = baseUrl || (process?.env?.NEXT_PUBLIC_API_BASE as string)!;
     }
 
+    private async getAuthTokenFromCookie(name: string = this.authCookieName): Promise<string | null> {
+        const cookieStore = await cookies();
+        const authCookie = cookieStore.get(name)?.value;
+        return authCookie ? authCookie : null;
+    }
+
     async request<T = any>(path: string, options?: any): Promise<T> {
         const url = this.baseUrl + path;
 
+        const headers = await {
+            cookie: `${this.authCookieName}=${await this.getAuthTokenFromCookie()}`,
+        };
+
         const res = await fetch(url, {
             credentials: "include",
+            headers,
             ...options
         });
 

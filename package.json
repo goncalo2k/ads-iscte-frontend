@@ -9,7 +9,7 @@
     "lint": "eslint",
     "cf:build": "npx @opennextjs/cloudflare build",
     "cf:dev": "npx @opennextjs/cloudflare build && wrangler dev",
-    "cf:deploy": "npx @opennextjs/cloudflare build && wrangler deploy"
+    "cf:deploy": "npx @opennextjs/cloudflare build && wrangler deploy && wrangler tail"
   },
   "dependencies": {
     "@goncalo2k/g2k-styles": "^1.0.14",
