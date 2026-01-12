@@ -17,16 +17,16 @@ function isPublicPath(pathname: string) {
 }
 
 async function verifySession(request: NextRequest, cookieValue: string | undefined) {
-    console.log(['[mw] verifySession cookieValue:'], cookieValue)
     if (!cookieValue) return { valid: false };
 
     try {
         const res = await fetch(API_BASE_ENDPOINT + AUTH_VERIFY_ENDPOINT, {
             credentials: "include",
             cache: 'no-store',
+            headers: { cookie: `${AUTH_COOKIE_NAME}=${cookieValue}` }
         });
-        console.log(['[mw] verifySession response:'], res)
-        if (!res.ok || res.status !== 200) return { valid: false };
+        const responseData = (await res.json()).data;
+        if (!!responseData.status && responseData.status !== 200) return { valid: false };
         return { valid: true };
     } catch (error) {
         console.log('[mw] Error verifying session:', error);
@@ -38,15 +38,8 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const cookieValue = request.cookies.get(AUTH_COOKIE_NAME)?.value;
-    console.log("[mw] host:", request.headers.get("host"));
-    console.log("[mw] cookie header:", request.headers.get("cookie"));
-    console.log("[mw] cookies:", request.cookies.getAll());
-
-    console.log("[mw] pathname:", pathname);
-    console.log("[mw] isProtected:", isProtected(pathname));
     if (isProtected(pathname)) {
         const { valid } = await verifySession(request, cookieValue);
-        console.log("[mw-protected] valid?:", valid);
         if (!valid) {
             const response = NextResponse.redirect(new URL('/', request.url));
             return response;
