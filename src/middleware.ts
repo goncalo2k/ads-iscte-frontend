@@ -38,8 +38,9 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const cookieValue = request.cookies.get(AUTH_COOKIE_NAME)?.value;
-
+    
     console.log("[mw] pathname:", pathname);
+    console.log("[mw] request.cookies:", request.cookies);
     console.log("[mw] cookieValue:", cookieValue);
     console.log("[mw] isProtected:", isProtected(pathname));
     if (isProtected(pathname)) {
